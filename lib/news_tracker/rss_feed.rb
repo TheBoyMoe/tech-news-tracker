@@ -1,10 +1,13 @@
 class NewsTracker::RssFeed
+  attr_reader :newsletter_url
 
-  # initialize with url
+  def initialize(url)
+    @newsletter_url = url
+  end
 
-
+  # returns an array of newsletter hashes
   def fetch_feed
-    rss = RSS::Parser.parse(open('http://rubyweekly.com/rss/16581bfg'), false)
+    rss = RSS::Parser.parse(open(self.newsletter_url), false)
     rss.items.map do |item|
       newsletter = {}
       newsletter[:title] = item.title
@@ -15,6 +18,7 @@ class NewsTracker::RssFeed
     end
   end
 
+  # returns an array of article hashes
   def parse_html(content)
     doc = Nokogiri::HTML(content)
     result = []

@@ -1,3 +1,6 @@
+## Outline
+
+
 ## Resources
 
 ### RSS Feeds
