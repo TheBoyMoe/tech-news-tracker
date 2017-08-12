@@ -1,7 +1,8 @@
 class NewsTracker::CLI
 
   def initialize
-
+    # TODO
+    # load the articles on app launch
   end
 
   def greet_user
@@ -19,11 +20,23 @@ class NewsTracker::CLI
   end
 
   def menu
-    # TODO
     self.list_options
     # capture & process user input
-    self.print_list
-    self.prompt_user
+    input = ''
+    while input != 'exit'
+      input = gets.strip
+      case input
+      when '1'
+        puts "selected RoR"
+      when '2'
+        puts "selected JS"
+      when '3'
+        puts 'selected Node'
+      else
+        puts 'Input not recognised, try again'
+      end
+    end
+    puts 'Goodbye!'
   end
 
   def print_list
