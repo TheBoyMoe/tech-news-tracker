@@ -3,4 +3,4 @@
 require 'bundler/setup'
 require 'news_tracker'
 
-NewsTracker::CLI.new
+NewsTracker::CLI.new.call
