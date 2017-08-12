@@ -1,10 +1,10 @@
 ## Outline
 
 upon launching the app, user is presented with a menu:
-  1. select an option for javavscript, Node or Ruby, 'exit'
-  2. display a list of the latest title Articles
-  3. pick an article , or go back to original menu
-  4. select to view article or go back to menu
+[x] select an option for javavscript, Node or Ruby, 'exit'
+[ ] display a list of the latest title Articles
+[ ] pick an article , or go back to original menu
+[ ] select to view article or go back to menu
 
 ## Resources
 
@@ -15,10 +15,6 @@ upon launching the app, user is presented with a menu:
 3. [Javascript Weekly](http://javascriptweekly.com/rss/221bj275)
 4. [React Weekly](https://react.statuscode.com/rss/1finckh3)
 5. [Mobile Weekly](https://mobilewebweekly.com/rss/2638hl3j)
-
-### Examples
-
-1. [Museum CLI Gem](https://github.com/aviflombaum/museum-shows/blob/refactored/lib/command_line.rb)
 
 
 ### Articles

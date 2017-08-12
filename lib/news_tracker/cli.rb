@@ -5,23 +5,22 @@ class NewsTracker::CLI
   end
 
   def greet_user
-    puts "--------------------------------------------------------------------\n   Welcome to News Tracker - Ruby/Rails/Javascript and Node News!\n--------------------------------------------------------------------"
+    puts "------------------------------------------------------------------\n  Welcome to News Tracker - Ruby/Rails/Javascript and Node News!\n------------------------------------------------------------------"
   end
 
-  # def list_options
-  #   puts "\n  Select an option\n  '1' for Ruby news\n  '2' for Javascript news\n  '3' for NodeJS news\n  Type 'exit' to quit"
-  # end
+  def list_options
+    puts "  Select an option\n  '1' for Ruby news\n  '2' for Javascript news\n  '3' for NodeJS news\n  Type 'exit' to quit\n\n"
+  end
 
   def call
     # TODO
     self.greet_user
-    # menu
-    #
+    self.menu
   end
 
   def menu
     # TODO
-    # list_options
+    self.list_options
     # capture & process user input
   end
 
