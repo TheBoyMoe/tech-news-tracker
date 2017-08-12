@@ -7,6 +7,15 @@ RSpec.describe NewsTracker do
 
   context NewsTracker::CLI do
     let(:cli){NewsTracker::CLI.new}
+    let(:titles){[
+      "1. Fixing bundler's dependency resolution algorithm",
+      "2. A crash course in analysing memory usage in Ruby",
+      "3. Redis 4.0 now on RedisGreen",
+      "4. Looking into CSFR protection in Rails",
+      "5. Advanced anumeration in Ruby",
+      "6. Why it's just lazy to bad mouth Rails",
+      "7. Effectively managing localization files in Rails"
+    ]}
 
     describe '#greet_user' do
       it "Greet the user when the app launches" do
@@ -16,7 +25,14 @@ RSpec.describe NewsTracker do
 
     describe '#list_options' do
       it "List the available options" do
-        expect{cli.list_options}.to output("  Select an option\n  '1' for Ruby news\n  '2' for Javascript news\n  '3' for NodeJS news\n  Type 'exit' to quit\n\n").to_stdout
+        expect{cli.list_options}.to output("  Select an option\n  '1' for Ruby and Rails news\n  '2' for Javascript news\n  '3' for NodeJS news\n  Type 'exit' to quit\n\n").to_stdout
+      end
+    end
+
+    describe '#print_list' do
+      it "print a list of the latest article titles" do
+        expect{cli.print_list}.to output(
+        "  1. Fixing bundler's dependency resolution algorithm\n  2. A crash course in analysing memory usage in Ruby\n  3. Redis 4.0 now on RedisGreen\n  4. Looking into CSFR protection in Rails\n  5. Advanced anumeration in Ruby\n  6. Why it's just lazy to bad mouth Rails\n  7. Effectively managing localization files in Rails\n").to_stdout
       end
     end
 

@@ -9,7 +9,7 @@ class NewsTracker::CLI
   end
 
   def list_options
-    puts "  Select an option\n  '1' for Ruby news\n  '2' for Javascript news\n  '3' for NodeJS news\n  Type 'exit' to quit\n\n"
+    puts "  Select an option\n  '1' for Ruby and Rails news\n  '2' for Javascript news\n  '3' for NodeJS news\n  Type 'exit' to quit\n\n"
   end
 
   def call
@@ -22,6 +22,11 @@ class NewsTracker::CLI
     # TODO
     self.list_options
     # capture & process user input
+    self.print_list
+  end
+
+  def print_list
+    puts "  1. Fixing bundler's dependency resolution algorithm\n  2. A crash course in analysing memory usage in Ruby\n  3. Redis 4.0 now on RedisGreen\n  4. Looking into CSFR protection in Rails\n  5. Advanced anumeration in Ruby\n  6. Why it's just lazy to bad mouth Rails\n  7. Effectively managing localization files in Rails"
   end
 
 end
