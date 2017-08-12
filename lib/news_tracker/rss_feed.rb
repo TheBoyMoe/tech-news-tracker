@@ -12,7 +12,7 @@ class NewsTracker::RssFeed
       newsletter = {}
       newsletter[:title] = item.title
       newsletter[:link] = item.link
-      newsletter[:content] = parse_html(item.description)
+      newsletter[:content] = self.parse_html(item.description)
       newsletter[:pubDate] = item.pubDate
       newsletter
     end
@@ -32,5 +32,7 @@ class NewsTracker::RssFeed
     end
     result
   end
+
+  
 
 end
