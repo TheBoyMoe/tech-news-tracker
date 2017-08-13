@@ -23,18 +23,18 @@ class NewsTracker::CLI
     while input != 'exit'
       self.clear_screen
       if input == 'ruby'
-        self.print_articles(0)
+        self.print_titles(0)
         topic = 0
       elsif input == 'js'
-        self.print_articles(1)
+        self.print_titles(1)
         topic = 1
       elsif input == 'node'
-        self.print_articles(2)
+        self.print_titles(2)
         topic = 2
       elsif input == 'menu'
         self.list_options
       elsif input == 'list'
-        self.print_articles(topic)
+        self.print_titles(topic)
       elsif (input.to_i > 0 && input.to_i < NewsTracker::Article.all.size)
         self.print_article(input.to_i)
         self.prompt_user_to_take_action
@@ -46,8 +46,8 @@ class NewsTracker::CLI
     puts 'Goodbye!'
   end
 
-  def print_articles(topic)
-    puts self.fetch_titles(topic)
+  def print_titles(topic)
+    puts self.build_title_string(topic)
     self.prompt_user_to_select_article
   end
 
@@ -64,11 +64,11 @@ class NewsTracker::CLI
     puts "displaying details for article #{number}"
   end
 
-  def fetch_titles(topic)
+  def build_title_string(topic)
     NewsTracker::Article.clear_all
+    self.fetch_articles(topic)
     topic_str = topic_string(topic)
     str = "------------------------------------------------------------------\n  Displaying #{topic_str} news:\n------------------------------------------------------------------\n"
-    NewsTracker::RssFeed.new(@@urls[topic]).create_article_instances_from_hashes
     NewsTracker::Article.all.each.with_index(1) do |article, i|
       str += "  #{i}. #{article.title}\n"
     end
@@ -77,8 +77,13 @@ class NewsTracker::CLI
     # puts "Displaying #{topic} news:\n------------------------------------------------------------------\n  1. Fixing bundler's dependency resolution algorithm\n  2. A crash course in analysing memory usage in Ruby\n  3. Redis 4.0 now on RedisGreen\n  4. Looking into CSFR protection in Rails\n  5. Advanced anumeration in Ruby\n  6. Why it's just lazy to bad mouth Rails\n  7. Effectively managing localization files in Rails\n------------------------------------------------------------------"
   end
 
+  def fetch_articles(topic)
+      NewsTracker::RssFeed.new(@@urls[topic]).create_article_instances_from_hashes
+  end
+
   def prompt_user_to_select_article
-    puts "Enter a number between 1-7 to pick an article\nType 'menu' to return to the options menu or 'exit' to quit"
+    count = NewsTracker::Article.all.count
+    puts "Enter a number between 1-#{count} to pick an article\nType 'menu' to return to the options menu or 'exit' to quit"
   end
 
   def prompt_user_to_take_action

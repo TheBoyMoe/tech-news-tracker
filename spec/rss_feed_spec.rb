@@ -4,15 +4,8 @@ RSpec.describe NewsTracker::RssFeed do
 
   # TODO update with vcr gem
   describe '#create_article_instances_from_hashes' do
-    it "returns an array of article instances" do
-      # url = './fixtures/rss_feed/ruby_weekly_newsletter.xml'
-      url = 'http://rubyweekly.com/rss/1b38al0g'
-      articles = NewsTracker::RssFeed.new(url).create_article_instances_from_hashes
-      expect(articles).to be_a(Array)
-      expect(articles.first).to be_an_instance_of(NewsTracker::Article)
-    end
 
-    it "should save article instances to NewsTracker::Article.all" do
+    it "should create article instances from hashes, save those instances to NewsTracker::Article.all" do
       NewsTracker::Article.clear_all
       url = 'http://rubyweekly.com/rss/1b38al0g'
       NewsTracker::RssFeed.new(url).create_article_instances_from_hashes
