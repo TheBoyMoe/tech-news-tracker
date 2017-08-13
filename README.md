@@ -9,7 +9,7 @@ From the command line enter
 ```Ruby
   ./bin/newstracker_cli
 ```
-
+Pick the feed you wish to check from the options menu, then pick the article you want to know more about by entering it's number. You can open the article in a browser from the cli.
 
 ## Contributing
 
