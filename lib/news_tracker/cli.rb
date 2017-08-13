@@ -59,9 +59,9 @@ class NewsTracker::CLI
     puts "------------------------------------------------------------------\n  Option menu:\n------------------------------------------------------------------\n  Select a topic to list the latest articles\n  Type 'ruby' for Ruby and Rails news\n  Type 'js' for Javascript news\n  Type 'node' for NodeJS news\n  Type 'exit' to quit\n------------------------------------------------------------------\n"
   end
 
-  # TODO
   def print_article(number)
-    puts "displaying details for article #{number}"
+    article = NewsTracker::Article.all[number - 1]
+    puts "------------------------------------------------------------------\n\nTitle: #{article.title}\nAuthor: #{article.author}\nDescription: #{self.text_wrap(article.description)}\n------------------------------------------------------------------\nType 'o' to view in a browser"
   end
 
   def build_title_string(topic)
@@ -105,6 +105,10 @@ class NewsTracker::CLI
 
   def clear_screen
     system "clear"
+  end
+
+  def text_wrap(s, width = 54)
+    s.gsub(/(.{1,#{width}})(\s+|\Z)/, "\\1\n")
   end
 
 end
