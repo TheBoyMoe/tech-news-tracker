@@ -20,6 +20,7 @@ class NewsTracker::CLI
     # capture & process user input
     input = gets.strip.downcase
     topic = -1
+    article_num = 0
     while input != 'exit'
       self.clear_screen
       if input == 'ruby'
@@ -36,7 +37,12 @@ class NewsTracker::CLI
       elsif input == 'list'
         self.print_titles(topic)
       elsif (input.to_i > 0 && input.to_i < NewsTracker::Article.all.size)
+        article_num = input.to_i
         self.print_article(input.to_i)
+        self.prompt_user_to_take_action
+      elsif article_num > 0 && input == 'o'
+        NewsTracker::Article.all[article_num - 1].open_in_browser
+        sleep 1
         self.prompt_user_to_take_action
       else
         puts "Input not recognised, try again\nType 'menu' to return to the options menu or 'exit' to quit"
