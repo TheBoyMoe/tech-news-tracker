@@ -22,6 +22,21 @@ class NewsTracker::RssFeed
     end
   end
 
+  # return an array of srticle instances and save each article to NewsTracker::Article.all
+  def create_article_instances_from_hashes
+    newsletters = self.fetch_feed
+    newsletters.each do |newsletter|
+      newsletter[:content].each do |article_hash|
+        article = NewsTracker::Article.new
+        article.title = article_hash[:title]
+        article.author = article_hash[:author]
+        article.description = article_hash[:description]
+        article.url = article_hash[:url]
+        article.save
+      end
+    end
+  end
+
   # returns an array of article hashes (works with ruby and node newsletters)
   def parse_html(content)
     doc = Nokogiri::HTML(content)
@@ -60,21 +75,6 @@ class NewsTracker::RssFeed
       articles << article
     end
     articles
-  end
-
-  # return an array of srticle instances and save each article to NewsTracker::Article.all
-  def create_article_instances_from_hashes
-    newsletters = self.fetch_feed
-    newsletters.map do |newsletter|
-      newsletter[:content].map do |article_hash|
-        article = NewsTracker::Article.new
-        article.title = article_hash[:title]
-        article.author = article_hash[:author]
-        article.description = article_hash[:description]
-        article.url = article_hash[:url]
-        article.save
-      end
-    end.flatten
   end
 
 end

@@ -68,8 +68,8 @@ class NewsTracker::CLI
     NewsTracker::Article.clear_all
     topic_str = topic_string(topic)
     str = "Displaying #{topic_str} news:\n------------------------------------------------------------------\n"
-    articles = NewsTracker::RssFeed.new(@@urls[topic]).create_article_instances_from_hashes
-    articles.each.with_index(1) do |article, i|
+    NewsTracker::RssFeed.new(@@urls[topic]).create_article_instances_from_hashes
+    NewsTracker::Article.all.each.with_index(1) do |article, i|
       str += "  #{i}. #{article.title}\n"
     end
     str += "------------------------------------------------------------------"
