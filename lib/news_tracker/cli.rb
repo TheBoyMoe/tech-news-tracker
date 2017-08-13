@@ -21,6 +21,7 @@ class NewsTracker::CLI
     input = gets.strip.downcase
     topic = -1
     while input != 'exit'
+      self.clear_screen
       if input == 'ruby'
         self.print_articles(0)
         topic = 0
@@ -38,7 +39,7 @@ class NewsTracker::CLI
         self.print_article(input.to_i)
         self.prompt_user_to_take_action
       else
-        puts 'Input not recognised, try again'
+        puts "Input not recognised, try again\nType 'menu' to return to the options menu or 'exit' to quit"
       end
       input = gets.strip
     end
@@ -81,7 +82,7 @@ class NewsTracker::CLI
   end
 
   def prompt_user_to_take_action
-    puts "Type 'list' to review the list again, 'menu' to return to the options or 'exit' to quit"
+    puts "------------------------------------------------------------------\nType 'list' to review the list again\nType 'menu' to return to the options menu or 'exit' to quit\n------------------------------------------------------------------\n"
   end
 
   def topic_string(number)
@@ -95,6 +96,10 @@ class NewsTracker::CLI
       str = 'NodeJS'
     end
     str
+  end
+
+  def clear_screen
+    system "clear"
   end
 
 end
