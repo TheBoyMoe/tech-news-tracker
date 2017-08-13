@@ -29,10 +29,10 @@ RSpec.describe NewsTracker do
       end
     end
 
-    describe '#print_articles' do
+    describe '#fetch_titles' do
       it "print a list of the latest article titles" do
         topic = 'ruby'
-        expect{cli.print_articles(topic)}.to output(
+        expect{cli.fetch_titles(topic)}.to output(
         "Displaying ruby news:\n------------------------------------------------------------------\n  1. Fixing bundler's dependency resolution algorithm\n  2. A crash course in analysing memory usage in Ruby\n  3. Redis 4.0 now on RedisGreen\n  4. Looking into CSFR protection in Rails\n  5. Advanced anumeration in Ruby\n  6. Why it's just lazy to bad mouth Rails\n  7. Effectively managing localization files in Rails\n------------------------------------------------------------------\n").to_stdout
       end
     end
