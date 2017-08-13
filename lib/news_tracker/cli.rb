@@ -1,9 +1,5 @@
 class NewsTracker::CLI
 
-  # def initialize
-  #   # fetch the articles from ea on app launch
-  # end
-
   @@urls = [
     "http://rubyweekly.com/rss/16581bfg",
     "http://javascriptweekly.com/rss/221bj275",
@@ -79,8 +75,6 @@ class NewsTracker::CLI
       str += "  #{i}. #{article.title}\n"
     end
     str += "------------------------------------------------------------------"
-
-    # puts "Displaying #{topic} news:\n------------------------------------------------------------------\n  1. Fixing bundler's dependency resolution algorithm\n  2. A crash course in analysing memory usage in Ruby\n  3. Redis 4.0 now on RedisGreen\n  4. Looking into CSFR protection in Rails\n  5. Advanced anumeration in Ruby\n  6. Why it's just lazy to bad mouth Rails\n  7. Effectively managing localization files in Rails\n------------------------------------------------------------------"
   end
 
   def fetch_articles(topic)
