@@ -14,6 +14,8 @@ class NewsTracker::RssFeed
       newsletter[:link] = item.link
       if (self.newsletter_url == "http://javascriptweekly.com/rss/221bj275")
         newsletter[:content] = self.parse_js_html_content(item.description)
+      elsif (self.newsletter_url == 'http://nodeweekly.com/rss/1el2m89n')
+        newsletter[:content] = self.parse_node_html_content(item.description)
       else
         newsletter[:content] = self.parse_html(item.description)
       end
@@ -37,22 +39,22 @@ class NewsTracker::RssFeed
     end
   end
 
-  # returns an array of article hashes (works with ruby and node newsletters)
+  # returns an array of article hashes (works with ruby newsletter)
   def parse_html(content)
     doc = Nokogiri::HTML(content)
-    result = []
+    articles = []
     doc.search("td[align='left'] table.gowide")[2..-1].each do |article_table|
       a = {}
       a[:author] = article_table.search('div:first').text.strip
       a[:title] = article_table.search('a:first').text.strip
       a[:url] = article_table.search('a:first').attr('href').text.strip
       a[:description]= article_table.search('div:last').text.strip
-      result << a
+      articles << a
     end
-    result
+    articles
   end
 
-  # parse html content for js newsletters
+  # parse html content for js newsletter
   def parse_js_html_content(content)
     doc = Nokogiri::HTML(content)
     result = []
@@ -75,6 +77,30 @@ class NewsTracker::RssFeed
       articles << article
     end
     articles
+  end
+
+  def parse_node_html_content(content)
+      doc = Nokogiri::HTML(content)
+      elements = []
+      doc.css("td[align='left'] div").each do |div|
+        elements << div
+      end
+      articles = []
+      elements.each_slice(3).to_a.each do |array|
+        article = {}
+        array.each.with_index(1) do |div, i|
+          if i == 1
+            article[:author] = div.text.strip
+          elsif i == 2
+            article[:url] = div.css('a').attr('href').text.strip
+            article[:title] = div.css('a').text.strip
+          else
+            article[:description] = div.text.strip
+          end
+        end
+        articles << article
+      end
+      articles
   end
 
 end
