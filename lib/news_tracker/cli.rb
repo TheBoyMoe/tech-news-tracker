@@ -33,7 +33,7 @@ class NewsTracker::CLI
       elsif input == 'menu'
         self.list_options
       elsif input == 'list'
-        self.handle_input(topic)
+        self.print_articles(topic)
       elsif (input.to_i > 0 && input.to_i < NewsTracker::Article.all.size)
         self.print_article(input.to_i)
         self.prompt_user_to_take_action
@@ -51,11 +51,11 @@ class NewsTracker::CLI
   end
 
   def greet_user
-    puts "------------------------------------------------------------------\n  Welcome to News Tracker - Ruby/Rails/Javascript and Node News!\n------------------------------------------------------------------"
+    puts "------------------------------------------------------------------\n\n  Welcome to News Tracker - Ruby/Rails/Javascript and Node News!\n\n"
   end
 
   def list_options
-    puts "  Select a topic to list the latest articles\n  Type 'ruby' for Ruby and Rails news\n  Type 'js' for Javascript news\n  Type 'node' for NodeJS news\n  Type 'exit' to quit\n\n"
+    puts "------------------------------------------------------------------\n  Option menu:\n------------------------------------------------------------------\n  Select a topic to list the latest articles\n  Type 'ruby' for Ruby and Rails news\n  Type 'js' for Javascript news\n  Type 'node' for NodeJS news\n  Type 'exit' to quit\n------------------------------------------------------------------\n"
   end
 
   # TODO
@@ -63,11 +63,10 @@ class NewsTracker::CLI
     puts "displaying details for article #{number}"
   end
 
-  # TODO
   def fetch_titles(topic)
     NewsTracker::Article.clear_all
     topic_str = topic_string(topic)
-    str = "Displaying #{topic_str} news:\n------------------------------------------------------------------\n"
+    str = "------------------------------------------------------------------\n  Displaying #{topic_str} news:\n------------------------------------------------------------------\n"
     NewsTracker::RssFeed.new(@@urls[topic]).create_article_instances_from_hashes
     NewsTracker::Article.all.each.with_index(1) do |article, i|
       str += "  #{i}. #{article.title}\n"
@@ -78,7 +77,7 @@ class NewsTracker::CLI
   end
 
   def prompt_user_to_select_article
-    puts "  Enter a number between 1-7 to pick an article or\n  type 'menu' to return to the options menu or 'exit' to quit"
+    puts "Enter a number between 1-7 to pick an article\nType 'menu' to return to the options menu or 'exit' to quit"
   end
 
   def prompt_user_to_take_action
