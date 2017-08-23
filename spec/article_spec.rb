@@ -88,4 +88,40 @@ RSpec.describe NewsTracker::Article do
     end
   end
 
+  describe '.find_or_insert' do
+    it "creates an instance of article and inserts it into the database if it does not already exist" do
+      article.title = 'ES6, The future of JS'
+      article.author = 'John Smith'
+      article.description = 'The future of JS is here... '
+      article.url = 'http://jsweekly.com'
+      item1 = article.insert
+
+      item2 = NewsTracker::Article.find_or_insert(
+        title: 'ES6, The future of JS',
+        author: 'John Smith',
+        description: 'The future of JS is here... ',
+        url: 'http://jsweekly.com')
+        
+      expect(item1).to be_instance_of(NewsTracker::Article)
+      expect(item2).to be_instance_of(NewsTracker::Article)
+      expect(item1.id).to eq(item2.id)
+    end
+
+    it "when two articles have the same author, but different titles, both should be inserted" do
+      item1 = NewsTracker::Article.find_or_insert(
+        title: 'ES6, The future of JS',
+        author: 'John Smith',
+        description: 'The future of JS is here... ',
+        url: 'http://jsweekly.com')
+
+      item2 = NewsTracker::Article.find_or_insert(
+        title: 'Build a chatbot with NodeJS',
+        author: 'John Smith',
+        description: 'The future of JS is here... ',
+        url: 'http://jsweekly.com')
+
+      expect(item1.id).not_to eq(item2.id)
+    end
+  end
+
 end

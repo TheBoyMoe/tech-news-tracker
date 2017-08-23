@@ -48,4 +48,29 @@ class NewsTracker::Article
     self
   end
 
+  def self.find_or_insert(title:, author:, description:, url:)
+    sql = <<-SQL
+      SELECT * FROM articles
+      WHERE title = ? AND author = ?
+    SQL
+    array = DB[:conn].execute(sql, title, author)
+    if array.empty?
+      article = NewsTracker::Article.new
+      article.title = title
+      article.author = author
+      article.description = description
+      article.url = url
+      article.insert
+    else
+      data = array.first
+      article = NewsTracker::Article.new
+      article.id = data[0]
+      article.title = data[1]
+      article.author = data[2]
+      article.description = data[3]
+      article.url = data[4]
+      article
+    end
+  end
+
 end
