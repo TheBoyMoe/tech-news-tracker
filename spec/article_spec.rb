@@ -25,6 +25,20 @@ RSpec.describe NewsTracker::Article do
     end
   end
 
+  before(:each) do
+    DB[:conn].execute('DROP TABLE IF EXISTS articles')
+    sql = <<-SQL
+      CREATE TABLE IF NOT EXISTS articles (
+        id INTEGER PRIMARY KEY,
+        title TEXT,
+        author TEXT,
+        description TEXT,
+        url TEXT
+      )
+    SQL
+    DB[:conn].execute(sql)
+  end
+
   describe '#save' do
     it "saves the particlular article to all articles" do
       article.save
