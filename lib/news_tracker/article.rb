@@ -1,5 +1,5 @@
 class NewsTracker::Article
-  attr_accessor :title, :author, :description, :url
+  attr_accessor :id, :title, :author, :description, :url
   @@all = []
 
   def save
@@ -36,6 +36,16 @@ class NewsTracker::Article
 
   def self.drop_table
     DB[:conn].execute("DROP TABLE IF EXISTS articles")
+  end
+
+  def insert
+    sql = <<-SQL
+      INSERT INTO articles (title, author, description, url)
+      VALUES (?, ?, ?, ?)
+    SQL
+    DB[:conn].execute(sql, self.title, self.author, self.description, self.url)
+    self.id = DB[:conn].execute("SELECT last_insert_rowid() FROM articles")[0][0]
+    self
   end
 
 end

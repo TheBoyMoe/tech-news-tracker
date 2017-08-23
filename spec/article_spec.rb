@@ -76,4 +76,16 @@ RSpec.describe NewsTracker::Article do
     end
   end
 
+  describe '#insert' do
+    it "inserts an article instance to the database, returns an instance and sets the id attribute" do
+      article.title = 'ES6, The future of JS'
+      article.author = 'John Smith'
+      article.description = 'The future of JS is here... '
+      article.url = 'http://jsweekly.com'
+      item = article.insert
+      expect(item).to be_instance_of(NewsTracker::Article)
+      expect(item.id).not_to eq(nil)
+    end
+  end
+
 end
