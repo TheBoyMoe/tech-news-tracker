@@ -60,4 +60,20 @@ RSpec.describe NewsTracker::Article do
     end
   end
 
+  describe '.create_table' do
+    it "creates the articles table in the database" do
+      NewsTracker::Article.create_table
+      sql = "SELECT tbl_name FROM sqlite_master WHERE type='table' AND tbl_name='articles';"
+      expect(DB[:conn].execute(sql)[0]).to eq(['articles'])
+    end
+  end
+
+  describe '.drop_table' do
+    it "drops the articles table from the database" do
+      NewsTracker::Article.drop_table
+      sql = "SELECT tbl_name FROM sqlite_master WHERE type='table' AND tbl_name='articles';"
+      expect(DB[:conn].execute(sql)[0]).to eq(nil)
+    end
+  end
+
 end

@@ -21,4 +21,21 @@ class NewsTracker::Article
     # system("open '#{self.url}'")
   end
 
+  def self.create_table
+    sql = <<-SQL
+      CREATE TABLE IF NOT EXISTS articles (
+        id INTEGER PRIMARY KEY,
+        title TEXT,
+        author TEXT,
+        description TEXT,
+        url TEXT
+      )
+    SQL
+    DB[:conn].execute(sql)
+  end
+
+  def self.drop_table
+    DB[:conn].execute("DROP TABLE IF EXISTS articles")
+  end
+
 end
