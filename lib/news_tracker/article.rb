@@ -14,9 +14,11 @@ class NewsTracker::Article
     self.all.clear
   end
 
-  # works in ubuntu
   def open_in_browser
+    # works in ubuntu
     system("gnome-open '#{self.url}'")
+    # on mac
+    # system("open '#{self.url}'")
   end
 
 end

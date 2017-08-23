@@ -3,7 +3,7 @@ class NewsTracker::CLI
   @@urls = [
     "http://rubyweekly.com/rss/16581bfg",
     "http://javascriptweekly.com/rss/221bj275",
-    "http://nodeweekly.com/rss/1el2m89n"
+    "https://nodeweekly.com/rss/"
   ]
 
   def call

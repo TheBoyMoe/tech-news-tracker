@@ -14,7 +14,7 @@ class NewsTracker::RssFeed
       newsletter[:link] = item.link
       if (self.newsletter_url == "http://javascriptweekly.com/rss/221bj275")
         newsletter[:content] = self.parse_js_html_content(item.description)
-      elsif (self.newsletter_url == 'http://nodeweekly.com/rss/1el2m89n')
+      elsif (self.newsletter_url == 'https://nodeweekly.com/rss/')
         newsletter[:content] = self.parse_node_html_content(item.description)
       else
         newsletter[:content] = self.parse_html(item.description)
