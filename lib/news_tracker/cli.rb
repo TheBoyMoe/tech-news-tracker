@@ -32,6 +32,12 @@ class NewsTracker::CLI
         self.list_options
       elsif input == 'list'
         self.print_titles(topic)
+      elsif input == 'archive'
+        # TODO print a list of archived articles
+
+      elsif input == 'a'
+        # TODO insert the article into the database
+        NewsTracker::Article.find_or_insert(title: 'Dummy title', author: "Joe Bloggs", description: 'Dummy article to test database inert', url: nil)
       elsif (input.to_i > 0 && input.to_i < NewsTracker::Article.all.size)
         article_num = input.to_i
         self.print_article(input.to_i)
