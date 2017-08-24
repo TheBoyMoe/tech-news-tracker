@@ -47,7 +47,7 @@ RSpec.describe NewsTracker do
     describe '#print_article' do
       it "print the selected article to the screen" do
         article = NewsTracker::Article.all.first
-        expect{cli.print_article(1)}.to output("------------------------------------------------------------------\n\nTitle: #{article.title}\nAuthor: #{article.author}\nDescription: #{cli.text_wrap(article.description)}\n------------------------------------------------------------------\nType 'o' to view in a browser\nType 'a' to archive the article\n").to_stdout
+        expect{cli.print_article(1)}.to output("------------------------------------------------------------------\n\nTitle: #{article.title}\nAuthor: #{article.author}\nDescription: #{cli.text_wrap(article.description)}\n------------------------------------------------------------------\nType 'o' to view in a browser\nType 'a' to archive the article and return to article list\n").to_stdout
       end
     end
 
@@ -59,7 +59,7 @@ RSpec.describe NewsTracker do
 
     describe '#prompt_user_to_archive_article' do
       it "promt the user to archive the recently opened article" do
-        expect{cli.prompt_user_to_archive_article}.to output("------------------------------------------------------------------\nType 'a' to archive the article\n").to_stdout
+        expect{cli.prompt_user_to_archive_article}.to output("------------------------------------------------------------------\nType 'a' to archive the article and return to article list\n").to_stdout
       end
     end
 
