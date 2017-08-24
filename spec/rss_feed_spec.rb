@@ -12,10 +12,10 @@ RSpec.describe NewsTracker::RssFeed do
       articles = NewsTracker::Article.all
       expect(articles).to be_a(Array)
       expect(articles.first).to be_an_instance_of(NewsTracker::Article)
-      expect(articles.first.title).to eq("Fixing Bundler's Dependency Resolution Algorithm")
-      expect(articles.first.author).to eq("Dependabot")
-      expect(articles.first.description).to eq("A bug leads to a journey into the resolution logic of Bundler (and a fix that speeds things up immensely).")
-      expect(articles.first.url).to eq("https://dependabot.com/blog/improving-dependency-resolution-in-bundler")
+      expect(articles.first.title).to eq("TestProf: A Doctor for Slow Ruby Tests")
+      expect(articles.first.author).to eq("Martian Chronicles")
+      expect(articles.first.description).to eq("TestProf is a test profiling toolbox containing tools for profiling by test type or database event as well as faking background jobs.")
+      expect(articles.first.url).to eq("https://evilmartians.com/chronicles/testprof-a-good-doctor-for-slow-ruby-tests")
     end
   end
 

@@ -101,7 +101,7 @@ RSpec.describe NewsTracker::Article do
         author: 'John Smith',
         description: 'The future of JS is here... ',
         url: 'http://jsweekly.com')
-        
+
       expect(item1).to be_instance_of(NewsTracker::Article)
       expect(item2).to be_instance_of(NewsTracker::Article)
       expect(item1.id).to eq(item2.id)
@@ -121,6 +121,19 @@ RSpec.describe NewsTracker::Article do
         url: 'http://jsweekly.com')
 
       expect(item1.id).not_to eq(item2.id)
+    end
+  end
+
+  describe '.new_from_db' do
+    it "creates an instance of Article from attribute values" do
+      row = [1, 'ES6, The future of JS', 'John Smith', 'The future of JS is here... ', 'http://jsweekly.com']
+      article = NewsTracker::Article.new_from_db(row)
+      expect(article).to be_instance_of(NewsTracker::Article)
+      expect(article.id).to eq(row[0])
+      expect(article.title).to eq(row[1])
+      expect(article.author).to eq(row[2])
+      expect(article.description).to eq(row[3])
+      expect(article.url).to eq(row[4])
     end
   end
 

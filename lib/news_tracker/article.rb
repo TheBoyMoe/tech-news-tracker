@@ -62,15 +62,19 @@ class NewsTracker::Article
       article.url = url
       article.insert
     else
-      data = array.first
-      article = NewsTracker::Article.new
-      article.id = data[0]
-      article.title = data[1]
-      article.author = data[2]
-      article.description = data[3]
-      article.url = data[4]
-      article
+      row = array.first
+      self.new_from_db(row)
     end
+  end
+
+  def self.new_from_db(row)
+    article = NewsTracker::Article.new
+    article.id = row[0]
+    article.title = row[1]
+    article.author = row[2]
+    article.description = row[3]
+    article.url = row[4]
+    article
   end
 
 end
