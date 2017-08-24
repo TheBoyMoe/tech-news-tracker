@@ -96,11 +96,7 @@ RSpec.describe NewsTracker::Article do
       article.url = 'http://jsweekly.com'
       item1 = article.insert
 
-      item2 = NewsTracker::Article.find_or_insert(
-        title: 'ES6, The future of JS',
-        author: 'John Smith',
-        description: 'The future of JS is here... ',
-        url: 'http://jsweekly.com')
+      item2 = NewsTracker::Article.find_or_insert(article)
 
       expect(item1).to be_instance_of(NewsTracker::Article)
       expect(item2).to be_instance_of(NewsTracker::Article)
@@ -108,17 +104,20 @@ RSpec.describe NewsTracker::Article do
     end
 
     it "when two articles have the same author, but different titles, both should be inserted" do
-      item1 = NewsTracker::Article.find_or_insert(
-        title: 'ES6, The future of JS',
-        author: 'John Smith',
-        description: 'The future of JS is here... ',
-        url: 'http://jsweekly.com')
+      item1 = NewsTracker::Article.new
+      item1.title = 'ES6, The future of JS'
+      item1.author = 'John Smith'
+      item1.description = nil
+      item1.url = nil
 
-      item2 = NewsTracker::Article.find_or_insert(
-        title: 'Build a chatbot with NodeJS',
-        author: 'John Smith',
-        description: 'The future of JS is here... ',
-        url: 'http://jsweekly.com')
+      item2 = NewsTracker::Article.new
+      item2.title = 'Build a Chatbot with NodeJS'
+      item2.author = 'John Smith'
+      item2.description = nil
+      item2.url = nil
+
+      item1 = NewsTracker::Article.find_or_insert(item1)
+      item2 = NewsTracker::Article.find_or_insert(item2)
 
       expect(item1.id).not_to eq(item2.id)
     end

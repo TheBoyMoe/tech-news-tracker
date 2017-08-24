@@ -16,9 +16,9 @@ class NewsTracker::Article
 
   def open_in_browser
     # works in ubuntu
-    system("gnome-open '#{self.url}'")
+    # system("gnome-open '#{self.url}'")
     # on mac
-    # system("open '#{self.url}'")
+    system("open '#{self.url}'")
   end
 
   def self.create_table
@@ -48,18 +48,13 @@ class NewsTracker::Article
     self
   end
 
-  def self.find_or_insert(title:, author:, description:, url:)
+  def self.find_or_insert(article)
     sql = <<-SQL
       SELECT * FROM articles
       WHERE title = ? AND author = ?
     SQL
-    array = DB[:conn].execute(sql, title, author)
+    array = DB[:conn].execute(sql, article.title, article.author)
     if array.empty?
-      article = NewsTracker::Article.new
-      article.title = title
-      article.author = author
-      article.description = description
-      article.url = url
       article.insert
     else
       row = array.first

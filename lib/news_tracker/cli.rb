@@ -37,7 +37,9 @@ class NewsTracker::CLI
 
       elsif input == 'a'
         # TODO insert the article into the database
-        NewsTracker::Article.find_or_insert(title: 'Dummy title', author: "Joe Bloggs", description: 'Dummy article to test database inert', url: nil)
+        if @article != nil
+          NewsTracker::Article.find_or_insert(@article)
+        end
         self.print_titles(topic)
       elsif (input.to_i > 0 && input.to_i < NewsTracker::Article.all.size)
         article_num = input.to_i
@@ -70,8 +72,8 @@ class NewsTracker::CLI
   end
 
   def print_article(number)
-    article = NewsTracker::Article.all[number - 1]
-    puts "------------------------------------------------------------------\n\nTitle: #{article.title}\nAuthor: #{article.author}\nDescription: #{self.text_wrap(article.description)}\n------------------------------------------------------------------\nType 'o' to view in a browser\nType 'a' to archive the article and return to article list"
+    @article = NewsTracker::Article.all[number - 1]
+    puts "------------------------------------------------------------------\n\nTitle: #{@article.title}\nAuthor: #{@article.author}\nDescription: #{self.text_wrap(@article.description)}\n------------------------------------------------------------------\nType 'o' to view in a browser\nType 'a' to archive the article and return to article list"
   end
 
   def build_title_string(topic)
