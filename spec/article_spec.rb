@@ -89,6 +89,26 @@ RSpec.describe NewsTracker::Article do
   end
 
   describe '.find_or_insert' do
+
+    # context 'when an article already exist' do
+    #   before do
+    #     # Insert existing article
+    #   end
+    #
+    #   let(:existing_article) do
+    #     # create the article
+    #   end
+    #
+    #   it 'is not going to create a new one on find' do
+    #     # test here
+    #     # existing_article
+    #   end
+    #
+    #   it 'is logging a message that the article already exist' do
+    #     # test here
+    #   end
+    # end
+
     it "creates an instance of article and inserts it into the database if it does not already exist" do
       article.title = 'ES6, The future of JS'
       article.author = 'John Smith'
@@ -134,6 +154,41 @@ RSpec.describe NewsTracker::Article do
       expect(article.description).to eq(row[3])
       expect(article.url).to eq(row[4])
     end
+  end
+
+  describe '.fetch_all_articles' do
+    let(:item1) do
+      item1 = NewsTracker::Article.new
+      item1.title = 'ES6, The future of JS'
+      item1.author = 'John Smith'
+      item1.description = nil
+      item1.url = nil
+      item1
+    end
+
+    let(:item2) do
+      item2 = NewsTracker::Article.new
+      item2.title = 'Build a Chatbot with NodeJS'
+      item2.author = 'John Smith'
+      item2.description = nil
+      item2.url = nil
+      item2
+    end
+
+    context 'if there are some articles' do
+      before do
+        NewsTracker::Article.find_or_insert(item1)
+        NewsTracker::Article.find_or_insert(item2)
+      end
+
+      it "fetch all archived articles from the database and return an array of article instances" do
+        articles = NewsTracker::Article.fetch_all_articles
+        expect(articles).to be_a(Array)
+        expect(articles.count).not_to eq(0)
+        expect(articles.first).to be_instance_of(NewsTracker::Article)
+      end
+    end
+
   end
 
 end

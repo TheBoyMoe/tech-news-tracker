@@ -72,4 +72,10 @@ class NewsTracker::Article
     article
   end
 
+  def self.fetch_all_articles
+    articles = DB[:conn].execute("SELECT * FROM articles").map do |row|
+      self.new_from_db(row)
+    end
+  end
+
 end

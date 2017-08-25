@@ -33,10 +33,12 @@ class NewsTracker::CLI
       elsif input == 'list'
         self.print_titles(topic)
       elsif input == 'archive'
+        # TODO fetch all archived articles from the database
+
         # TODO print a list of archived articles
 
       elsif input == 'a'
-        # TODO insert the article into the database
+        # insert the article into the database
         if @article != nil
           NewsTracker::Article.find_or_insert(@article)
         end

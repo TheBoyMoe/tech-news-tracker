@@ -15,6 +15,6 @@ namespace :db do
 end
 
 desc 'load the environment'
-  task :environment do
-    require_relative './lib/news_tracker'
-  end
+task :environment do
+  require_relative './lib/news_tracker'
+end
