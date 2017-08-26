@@ -8,5 +8,7 @@
 /spec/reports/
 /tmp/
 
+db/articles.db
+
 # rspec failure tracking
 .rspec_status

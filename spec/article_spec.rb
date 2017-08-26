@@ -156,7 +156,7 @@ RSpec.describe NewsTracker::Article do
     end
   end
 
-  describe '.fetch_all_articles' do
+  describe '.fetch_archive' do
     let(:item1) do
       item1 = NewsTracker::Article.new
       item1.title = 'ES6, The future of JS'
@@ -182,13 +182,34 @@ RSpec.describe NewsTracker::Article do
       end
 
       it "fetch all archived articles from the database and return an array of article instances" do
-        articles = NewsTracker::Article.fetch_all_articles
+        articles = NewsTracker::Article.fetch_archive
         expect(articles).to be_a(Array)
         expect(articles.count).not_to eq(0)
         expect(articles.first).to be_instance_of(NewsTracker::Article)
       end
     end
 
+  end
+
+  describe '.fetch_article_from_archive' do
+    let(:item1) do
+      item1 = NewsTracker::Article.new
+      item1.title = 'ES6, The future of JS'
+      item1.author = 'John Smith'
+      item1.description = nil
+      item1.url = nil
+      item1
+    end
+
+    it "return an article from the database provided the id" do
+      item1.insert
+      article = NewsTracker::Article.fetch_article_from_archive(1)
+
+      expect(article).to be_an_instance_of(NewsTracker::Article)
+      expect(article.id).to eq(1)
+      expect(article.title).to eq('ES6, The future of JS')
+      expect(article.author).to eq('John Smith')
+    end
   end
 
 end

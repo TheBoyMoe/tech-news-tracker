@@ -16,7 +16,9 @@ class NewsTracker::CLI
     # capture & process user input
     input = gets.strip.downcase
     topic = -1
-    article_num = 0
+    @article_num = 0
+    @article = nil
+    @viewing_archive = false
     while input != 'exit'
       self.clear_screen
       if input == 'ruby'
@@ -33,31 +35,76 @@ class NewsTracker::CLI
       elsif input == 'list'
         self.print_titles(topic)
       elsif input == 'archive'
-        # TODO fetch all archived articles from the database
-
-        # TODO print a list of archived articles
-
+        self.print_archive_list
       elsif input == 'a'
         # insert the article into the database
         if @article != nil
           NewsTracker::Article.find_or_insert(@article)
         end
-        self.print_titles(topic)
-      elsif (input.to_i > 0 && input.to_i < NewsTracker::Article.all.size)
-        article_num = input.to_i
-        self.print_article(input.to_i)
-        self.prompt_user_to_take_action
-      elsif article_num > 0 && input == 'o'
-        NewsTracker::Article.all[article_num - 1].open_in_browser
-        sleep 1
+        self.print_titles(topic) # return to article list
+      elsif (input.to_i > 0 && input.to_i <= NewsTracker::Article.all.size)
+        @viewing_archive = false
+        @article_num = input.to_i
+        @article = NewsTracker::Article.all[@article_num - 1]
+        self.print_article(@article)
         self.prompt_user_to_archive_article
-        self.prompt_user_to_take_action
+        self.prompt_user_to_take_action('list')
+      elsif @article_num > 0 && input == 'o'
+        self.open_in_browser(@article)
+        sleep 1
+        if @viewing_archive
+          self.prompt_user_to_take_action('archive')
+        else
+          self.prompt_user_to_archive_article
+          self.prompt_user_to_take_action('list')
+        end
       else
         puts "Input not recognised, try again\nType 'menu' to return to the options menu or 'exit' to quit"
       end
       input = gets.strip
     end
     puts 'Goodbye!'
+  end
+
+  def print_archive_list
+    if NewsTracker::Article.fetch_archive.size > 0
+      puts self.build_archive_list_string
+      self.prompt_user_to_make_selection
+      input = gets.strip.to_i
+      if input > 0 && input <= NewsTracker::Article.fetch_archive.size
+        @viewing_archive = true
+        @article_num = input
+        @article = NewsTracker::Article.fetch_article_from_archive(@article_num)
+        self.clear_screen
+        self.print_article(@article)
+        self.prompt_user_to_take_action('archive')
+      elsif input > NewsTracker::Article.fetch_archive.size
+        puts "input not recognised"
+        sleep 1
+        self.clear_screen
+        self.print_archive_list
+      end
+    else
+      puts "------------------------------------------------------------------\nNo articles found\nType 'menu' to return to the options menu or 'exit' to quit\n------------------------------------------------------------------\n"
+    end
+  end
+
+  # def input_not_recognised
+  #   puts "Input not recognised, try again\nType 'menu' to return to the options menu or 'exit' to quit"
+  # end
+
+  def build_archive_list_string
+    str = "------------------------------------------------------------------\n  Displaying archive list:\n------------------------------------------------------------------\n"
+    # fetch all archived articles from the database & print a list of archived articles
+    NewsTracker::Article.fetch_archive.each.with_index(1) do |article, i|
+      str += "  #{i}. #{article.title}\n"
+    end
+    str += "------------------------------------------------------------------\n"
+  end
+
+  def prompt_user_to_make_selection
+    count = NewsTracker::Article.fetch_archive.size
+    puts build_prompt_user_string(count)
   end
 
   def print_titles(topic)
@@ -73,10 +120,13 @@ class NewsTracker::CLI
     puts "------------------------------------------------------------------\n  Option menu:\n------------------------------------------------------------------\n  Select a topic to list the latest articles\n  Type 'ruby' for Ruby and Rails news\n  Type 'js' for Javascript news\n  Type 'node' for NodeJS news\n  Type 'archive' to view article archive\n  Type 'exit' to quit\n------------------------------------------------------------------\n"
   end
 
-  def print_article(number)
-    @article = NewsTracker::Article.all[number - 1]
-    puts "------------------------------------------------------------------\n\nTitle: #{@article.title}\nAuthor: #{@article.author}\nDescription: #{self.text_wrap(@article.description)}\n------------------------------------------------------------------\nType 'o' to view in a browser\nType 'a' to archive the article and return to article list"
+  def print_article(article)
+    puts "------------------------------------------------------------------\n\nTitle: #{article.title}\nAuthor: #{article.author}\nDescription: #{self.text_wrap(article.description)}\n------------------------------------------------------------------\nType 'o' to view in a browser\n"
   end
+
+  # def add_archive_option
+  #   puts "Type 'a' to archive the article and return to article list"
+  # end
 
   def build_title_string(topic)
     NewsTracker::Article.clear_all
@@ -95,15 +145,20 @@ class NewsTracker::CLI
 
   def prompt_user_to_select_article
     count = NewsTracker::Article.all.count
-    puts "Enter a number between 1-#{count} to pick an article\nType 'menu' to return to the options menu or 'exit' to quit"
+    puts build_prompt_user_string(count)
   end
 
-  def prompt_user_to_take_action
-    puts "------------------------------------------------------------------\nType 'list' to review the list again\nType 'menu' to return to the options menu or 'exit' to quit\n------------------------------------------------------------------\n"
+  def build_prompt_user_string(count)
+    "Enter a number between 1-#{count} to pick an article\nType 'menu' to return to the options menu or 'exit' to quit\n------------------------------------------------------------------\n"
+  end
+
+  def prompt_user_to_take_action(list)
+    puts "------------------------------------------------------------------\nType '#{list}' to review the list again\nType 'menu' to return to the options menu or 'exit' to quit\n------------------------------------------------------------------\n"
   end
 
   def prompt_user_to_archive_article
-    puts "------------------------------------------------------------------\nType 'a' to archive the article and return to article list"
+    # puts "------------------------------------------------------------------\nType 'a' to archive the article and return to article list"
+    puts "Type 'a' to archive the article and return to article list"
   end
 
   def topic_string(number)
@@ -125,6 +180,13 @@ class NewsTracker::CLI
 
   def text_wrap(s, width = 54)
     s.gsub(/(.{1,#{width}})(\s+|\Z)/, "\\1\n")
+  end
+
+  def open_in_browser(article)
+    # on ubuntu
+    system("gnome-open '#{article.url}'")
+    # on mac
+    # system("open '#{article.url}'")
   end
 
 end
