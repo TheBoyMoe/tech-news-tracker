@@ -1,9 +1,9 @@
 module NewsTracker
   module Menu
-    class List
+    class Archive
 
       def display
-        puts 'Display the list of articles'
+        puts 'Display the list of archive articles'
       end
 
     end

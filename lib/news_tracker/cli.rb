@@ -13,76 +13,77 @@ class NewsTracker::CLI
   end
 
   def call
-    self.greet_user
-    self.menu
+    greet_user
+    menu
   end
 
   def menu
-    @current_menu.display
-    @current_menu.read_menu_command
-    @current_menu = @current_menu.process_command
-    return
+    @current_menu.display # display options
+    @current_menu.read_menu_command # read user input
+    @current_menu = @current_menu.process_command # return list/archive instance
+    # @current_menu.display_list # display article list
 
-    self.list_options
-    input = gets.strip.downcase
-    topic = -1
-    @article_num = 0
-    @article = nil
-    @viewing_archive = false
-    while input != 'exit'
-      self.clear_screen
-      if input == 'ruby'
-        self.print_titles(0)
-        topic = 0
-      elsif input == 'js'
-        self.print_titles(1)
-        topic = 1
-      elsif input == 'node'
-        self.print_titles(2)
-        topic = 2
-      elsif input == 'menu'
-        self.list_options
-      elsif input == 'list'
-        @viewing_archive = false
-        self.print_titles(topic)
-      elsif input == 'archive'
-        @viewing_archive = true
-        self.print_archive_list
-      elsif input == 'back'
-        if @viewing_archive
-          self.print_archive_list
-        else
-          @viewing_archive = false
-          self.print_titles(topic)
-        end
-      elsif input == 'a'
-        # insert the article into the database
-        if @article != nil
-          NewsTracker::Article.find_or_insert(@article)
-        end
-        self.print_titles(topic) # return to article list
-      elsif (input.to_i > 0 && input.to_i <= NewsTracker::Article.all.size)
-        @viewing_archive = false
-        @article_num = input.to_i
-        @article = NewsTracker::Article.all[@article_num - 1]
-        self.print_article(@article)
-        self.prompt_user_to_archive_article
-        self.prompt_user_to_take_action
-      elsif @article_num > 0 && input == 'o'
-        self.open_in_browser(@article)
-        sleep 1
-        if @viewing_archive
-          self.prompt_user_to_take_action
-        else
-          self.prompt_user_to_archive_article
-          self.prompt_user_to_take_action
-        end
-      else
-        puts "Input not recognised, try again\nType 'menu' to return to the options menu or 'exit' to quit"
-      end
-      input = gets.strip
-    end
-    puts 'Goodbye!'
+
+    # list_options
+    # input = gets.strip.downcase
+    # topic = -1
+    # @article_num = 0
+    # @article = nil
+    # @viewing_archive = false
+    # while input != 'exit'
+    #   self.clear_screen
+    #   if input == 'ruby'
+    #     self.print_titles(0)
+    #     topic = 0
+    #   elsif input == 'js'
+    #     self.print_titles(1)
+    #     topic = 1
+    #   elsif input == 'node'
+    #     self.print_titles(2)
+    #     topic = 2
+    #   elsif input == 'menu'
+    #     self.list_options
+    #   elsif input == 'list'
+    #     @viewing_archive = false
+    #     self.print_titles(topic)
+    #   elsif input == 'archive'
+    #     @viewing_archive = true
+    #     self.print_archive_list
+    #   elsif input == 'back'
+    #     if @viewing_archive
+    #       self.print_archive_list
+    #     else
+    #       @viewing_archive = false
+    #       self.print_titles(topic)
+    #     end
+    #   elsif input == 'a'
+    #     # insert the article into the database
+    #     if @article != nil
+    #       NewsTracker::Article.find_or_insert(@article)
+    #     end
+    #     self.print_titles(topic) # return to article list
+    #   elsif (input.to_i > 0 && input.to_i <= NewsTracker::Article.all.size)
+    #     @viewing_archive = false
+    #     @article_num = input.to_i
+    #     @article = NewsTracker::Article.all[@article_num - 1]
+    #     self.print_article(@article)
+    #     self.prompt_user_to_archive_article
+    #     self.prompt_user_to_take_action
+    #   elsif @article_num > 0 && input == 'o'
+    #     self.open_in_browser(@article)
+    #     sleep 1
+    #     if @viewing_archive
+    #       self.prompt_user_to_take_action
+    #     else
+    #       self.prompt_user_to_archive_article
+    #       self.prompt_user_to_take_action
+    #     end
+    #   else
+    #     puts "Input not recognised, try again\nType 'menu' to return to the options menu or 'exit' to quit"
+    #   end
+    #   input = gets.strip
+    # end
+    # puts 'Goodbye!'
   end
 
   def print_archive_list
@@ -131,9 +132,9 @@ class NewsTracker::CLI
     puts "------------------------------------------------------------------\n\n  Welcome to News Tracker - Ruby/Rails/Javascript and Node News!\n\n"
   end
 
-  def list_options
-    puts "------------------------------------------------------------------\n  Option menu:\n------------------------------------------------------------------\n  Select a topic to list the latest articles\n  Type 'ruby' for Ruby and Rails news\n  Type 'js' for Javascript news\n  Type 'node' for NodeJS news\n  Type 'archive' to view article archive\n  Type 'exit' to quit\n------------------------------------------------------------------\n"
-  end
+  # def list_options
+  #   puts "------------------------------------------------------------------\n  Option menu:\n------------------------------------------------------------------\n  Select a topic to list the latest articles\n  Type 'ruby' for Ruby and Rails news\n  Type 'js' for Javascript news\n  Type 'node' for NodeJS news\n  Type 'archive' to view article archive\n  Type 'exit' to quit\n------------------------------------------------------------------\n"
+  # end
 
   def print_article(article)
     puts "------------------------------------------------------------------\n\nTitle: #{article.title}\nAuthor: #{article.author}\nDescription: #{self.text_wrap(article.description)}\n------------------------------------------------------------------\nType 'o' to view in a browser\n"

@@ -6,6 +6,7 @@ module NewsTracker
       end
 
       def display
+        puts 'Display main menu options!'
       end
 
       def read_menu_command
@@ -13,7 +14,7 @@ module NewsTracker
       end
 
       def process_command
-        if is_a_language?
+        if is_list?
           # go to a list menu
           NewsTracker::Menu::List.new
         elsif is_archive?
@@ -25,12 +26,14 @@ module NewsTracker
 
       private
 
-      def is_a_language?
+      def is_list?
         @command == 'ruby' || @command == 'js' || @command == 'node'
       end
 
       def is_archive?
       end
+
+
     end
   end
 end
