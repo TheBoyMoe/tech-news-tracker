@@ -1,3 +1,5 @@
+require 'pry'
+
 class NewsTracker::CLI
 
   @@urls = [
@@ -18,13 +20,12 @@ class NewsTracker::CLI
   end
 
   def menu
-    @current_menu.display # display options
-    @current_menu.read_menu_command # read user input
-    @current_menu = @current_menu.process_command # return list/archive instance
-    # @current_menu.display_list # display article list
-
-
-    # list_options
+    binding.pry
+    @current_menu.display # display options and wait for input
+    @current_menu.read_menu_command # read user input, set @command
+    @current_menu = @current_menu.process_command
+    sub_menu
+      # list_options
     # input = gets.strip.downcase
     # topic = -1
     # @article_num = 0
@@ -85,6 +86,17 @@ class NewsTracker::CLI
     # end
     # puts 'Goodbye!'
   end
+
+  def sub_menu
+    # display sub_menu or return to main
+    if @current_menu.instance_of?(NewsTracker::Menu::List) || @current_menu.instance_of?(NewsTracker::Menu::Archive)
+      @current_menu.display
+    elsif @current_menu.instance_of?(NewsTracker::Menu::Main)
+      @current_menu.call
+    end
+  end
+
+
 
   def print_archive_list
     if NewsTracker::Article.fetch_archive.size > 0
