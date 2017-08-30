@@ -6,12 +6,23 @@ class NewsTracker::CLI
     "https://nodeweekly.com/rss/"
   ]
 
+  attr_reader :current_menu
+
+  def initialize
+    @current_menu = ::NewsTracker::Menu::Main.new
+  end
+
   def call
     self.greet_user
     self.menu
   end
 
   def menu
+    @current_menu.display
+    @current_menu.read_menu_command
+    @current_menu = @current_menu.process_command
+    return
+
     self.list_options
     input = gets.strip.downcase
     topic = -1
