@@ -26,7 +26,7 @@ module NewsTracker
         else
           # not a valid command, so stay in the same menu
           puts 'Not a valid command'
-          NewsTracker::CLI.new
+          NewsTracker::Menu::Main.new
         end
       end
 

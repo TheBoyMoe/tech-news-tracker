@@ -11,7 +11,7 @@ class NewsTracker::CLI
   attr_reader :current_menu
 
   def initialize
-    @current_menu = ::NewsTracker::Menu::Main.new
+    @current_menu = NewsTracker::Menu::Main.new
   end
 
   def call
@@ -20,7 +20,7 @@ class NewsTracker::CLI
   end
 
   def menu
-    binding.pry
+    #binding.pry
     @current_menu.display # display options and wait for input
     @current_menu.read_menu_command # read user input, set @command
     @current_menu = @current_menu.process_command
@@ -92,7 +92,7 @@ class NewsTracker::CLI
     if @current_menu.instance_of?(NewsTracker::Menu::List) || @current_menu.instance_of?(NewsTracker::Menu::Archive)
       @current_menu.display
     elsif @current_menu.instance_of?(NewsTracker::Menu::Main)
-      @current_menu.call
+      menu
     end
   end
 
