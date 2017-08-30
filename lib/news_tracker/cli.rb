@@ -2,11 +2,11 @@ require 'pry'
 
 class NewsTracker::CLI
 
-  @@urls = [
-    "http://rubyweekly.com/rss/16581bfg",
-    "http://javascriptweekly.com/rss/221bj275",
-    "https://nodeweekly.com/rss/"
-  ]
+  # @@urls = [
+  #   "http://rubyweekly.com/rss/16581bfg",
+  #   "http://javascriptweekly.com/rss/221bj275",
+  #   "https://nodeweekly.com/rss/"
+  # ]
 
   attr_reader :current_menu
 
@@ -96,6 +96,11 @@ class NewsTracker::CLI
     end
   end
 
+  def greet_user
+    puts "------------------------------------------------------------------\n\n  Welcome to News Tracker - Ruby/Rails/Javascript and Node News!\n\n"
+  end
+
+################################################################################
 
 
   def print_archive_list
@@ -140,9 +145,7 @@ class NewsTracker::CLI
     self.prompt_user_to_select_article
   end
 
-  def greet_user
-    puts "------------------------------------------------------------------\n\n  Welcome to News Tracker - Ruby/Rails/Javascript and Node News!\n\n"
-  end
+
 
   # def list_options
   #   puts "------------------------------------------------------------------\n  Option menu:\n------------------------------------------------------------------\n  Select a topic to list the latest articles\n  Type 'ruby' for Ruby and Rails news\n  Type 'js' for Javascript news\n  Type 'node' for NodeJS news\n  Type 'archive' to view article archive\n  Type 'exit' to quit\n------------------------------------------------------------------\n"
@@ -152,20 +155,20 @@ class NewsTracker::CLI
     puts "------------------------------------------------------------------\n\nTitle: #{article.title}\nAuthor: #{article.author}\nDescription: #{self.text_wrap(article.description)}\n------------------------------------------------------------------\nType 'o' to view in a browser\n"
   end
 
-  def build_title_string(topic)
-    NewsTracker::Article.clear_all
-    self.fetch_articles(topic)
-    topic_str = topic_string(topic)
-    str = "------------------------------------------------------------------\n  Displaying #{topic_str} news:\n------------------------------------------------------------------\n"
-    NewsTracker::Article.all.each.with_index(1) do |article, i|
-      str += "  #{i}. #{article.title}\n"
-    end
-    str += "------------------------------------------------------------------"
-  end
+  # def build_title_string(topic)
+  #   NewsTracker::Article.clear_all
+  #   self.fetch_articles(topic)
+  #   topic_str = topic_string(topic)
+  #   str = "------------------------------------------------------------------\n  Displaying #{topic_str} news:\n------------------------------------------------------------------\n"
+  #   NewsTracker::Article.all.each.with_index(1) do |article, i|
+  #     str += "  #{i}. #{article.title}\n"
+  #   end
+  #   str += "------------------------------------------------------------------"
+  # end
 
-  def fetch_articles(topic)
-      NewsTracker::RssFeed.new(@@urls[topic]).create_article_instances_from_hashes
-  end
+  # def fetch_articles(topic)
+  #     NewsTracker::RssFeed.new(@@urls[topic]).create_article_instances_from_hashes
+  # end
 
   def prompt_user_to_select_article
     count = NewsTracker::Article.all.count
@@ -184,18 +187,18 @@ class NewsTracker::CLI
     puts "Type 'a' to archive the article and return to article list"
   end
 
-  def topic_string(number)
-    str = ''
-    case number
-    when 0
-      str = 'Ruby'
-    when 1
-      str = 'Javascript'
-    when 2
-      str = 'NodeJS'
-    end
-    str
-  end
+  # def topic_string(number)
+  #   str = ''
+  #   case number
+  #   when 0
+  #     str = 'Ruby'
+  #   when 1
+  #     str = 'Javascript'
+  #   when 2
+  #     str = 'NodeJS'
+  #   end
+  #   str
+  # end
 
   def clear_screen
     system "clear"
