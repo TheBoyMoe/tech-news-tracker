@@ -91,6 +91,9 @@ class NewsTracker::CLI
     # display sub_menu or return to main
     if @current_menu.instance_of?(NewsTracker::Menu::List) || @current_menu.instance_of?(NewsTracker::Menu::Archive)
       @current_menu.display
+      @current_menu.read_menu_command
+      command = @current_menu.process_command
+      puts command
     elsif @current_menu.instance_of?(NewsTracker::Menu::Main)
       menu
     end
@@ -140,10 +143,10 @@ class NewsTracker::CLI
     puts build_prompt_user_string(count)
   end
 
-  def print_titles(topic)
-    puts self.build_title_string(topic)
-    self.prompt_user_to_select_article
-  end
+  # def print_titles(topic)
+  #   puts self.build_title_string(topic)
+  #   self.prompt_user_to_select_article
+  # end
 
 
 
@@ -170,14 +173,14 @@ class NewsTracker::CLI
   #     NewsTracker::RssFeed.new(@@urls[topic]).create_article_instances_from_hashes
   # end
 
-  def prompt_user_to_select_article
-    count = NewsTracker::Article.all.count
-    puts build_prompt_user_string(count)
-  end
+  # def prompt_user_to_select_article
+  #   count = NewsTracker::Article.all.count
+  #   puts build_prompt_user_string(count)
+  # end
 
-  def build_prompt_user_string(count)
-    "Enter a number between 1-#{count} to pick an article\nType 'menu' to return to the options menu or 'exit' to quit\n------------------------------------------------------------------\n"
-  end
+  # def build_prompt_user_string(count)
+  #   "Enter a number between 1-#{count} to pick an article\nType 'menu' to return to the options menu or 'exit' to quit\n------------------------------------------------------------------\n"
+  # end
 
   def prompt_user_to_take_action
     puts "------------------------------------------------------------------\nType 'back' to review the list again\nType 'menu' to return to the options menu or 'exit' to quit\n------------------------------------------------------------------\n"

@@ -17,10 +17,15 @@ module NewsTracker
       def display
         # display the list of articles
         puts build_article_list
+        puts prompt_user_to_select_article
       end
 
       def read_menu_command
         @command = $stdin.gets.strip.downcase
+      end
+
+      def process_command
+        @command
       end
 
       private
@@ -30,6 +35,12 @@ module NewsTracker
           str += "  #{i}. #{article.title}\n"
         end
         str += "------------------------------------------------------------------"
+      end
+
+      def prompt_user_to_select_article
+        str = "Enter a number between 1-#{NewsTracker::Article.all.size} to view more detail\n"
+        str += "Type back to return to the main menu\n"
+        str += '------------------------------------------------------------------\n'
       end
 
       def rss_feed_url
