@@ -26,13 +26,31 @@ RSpec.describe NewsTracker::CLI do
       end
 
       it 'should display the ruby article lists' do
+        expect()
+
+        subject.sub_menu
       end
 
-      it 'pick an article from the list' do
-      end
+
     end
+
   end
 
+  describe '#sub_menu' do
+
+    context 'prints a list of articles'
+
+      it 'I can pick an article from the list' do
+
+      end
+
+      it "I can go back to the main options menu" do
+
+      end
+
+    end
+
+  end
 
   # let(:titles){[
   #   "1. Fixing bundler's dependency resolution algorithm",
