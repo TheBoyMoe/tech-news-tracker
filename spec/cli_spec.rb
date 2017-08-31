@@ -4,10 +4,8 @@ require 'stringio'
 RSpec.describe NewsTracker::CLI do
   describe '#menu' do
 
-
     it 'prints the main menu' do
-      # expect(subject.current_menu).to receive(:display)
-      # subject.menu
+      # expect(subject.current_menu
       expect(subject.current_menu).to be_a(NewsTracker::Menu::Main)
       expect{subject.current_menu.display}.to output("------------------------------------------------------------------\n  Option menu:\n------------------------------------------------------------------\n  Select a topic to list the latest articles\n  Type 'ruby' for Ruby and Rails news\n  Type 'js' for Javascript news\n  Type 'node' for NodeJS news\n  Type 'archive' to view article archive\n  Type 'exit' to quit\n------------------------------------------------------------------\n").to_stdout
     end
@@ -29,12 +27,32 @@ RSpec.describe NewsTracker::CLI do
         expect(current_menu).to be_a(NewsTracker::Menu::List)
       end
 
-      # it 'should display the ruby article lists' do
-      #   str = 'Displaying ruby news:'
-      #   suppress_output{expect(subject.current_menu.display).to be_a(String)}
-      #   expect(subject.current_menu.display).to include(str)
-      # end
+      it 'should display the ruby article lists' do
+        expect(subject.current_menu).to receive(:display)
+        expect(subject.current_menu).to receive(:read_menu_command)
+        expect(subject.current_menu).to receive(:process_command)
 
+        suppress_output{subject.sub_menu}
+      end
+
+    end
+
+    context "when I give the 'archive' command" do
+      before do
+        $stdin = StringIO.new("archive\n")
+      end
+
+      after do
+        $stdin = STDIN
+      end
+
+      it "should change the current menu to the archive list" do
+
+      end
+
+      it "should display the list of archived articles" do
+
+      end
     end
 
   end
@@ -43,11 +61,11 @@ RSpec.describe NewsTracker::CLI do
 
     context 'prints a list of articles' do
 
-      it 'pick an article from the list' do
+      it 'can pick an article from the list' do
 
       end
 
-      it "go back to the main options menu" do
+      it "or go back to the main options menu" do
 
       end
 
