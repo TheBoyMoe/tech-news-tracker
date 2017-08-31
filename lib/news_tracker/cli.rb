@@ -2,12 +2,6 @@ require 'pry'
 
 class NewsTracker::CLI
 
-  # @@urls = [
-  #   "http://rubyweekly.com/rss/16581bfg",
-  #   "http://javascriptweekly.com/rss/221bj275",
-  #   "https://nodeweekly.com/rss/"
-  # ]
-
   attr_reader :current_menu
 
   def initialize
@@ -103,8 +97,10 @@ class NewsTracker::CLI
     puts "------------------------------------------------------------------\n\n  Welcome to News Tracker - Ruby/Rails/Javascript and Node News!\n\n"
   end
 
-################################################################################
 
+
+
+################################################################################
 
   def print_archive_list
     if NewsTracker::Article.fetch_archive.size > 0
@@ -143,20 +139,47 @@ class NewsTracker::CLI
     puts build_prompt_user_string(count)
   end
 
+  def print_article(article)
+    puts "------------------------------------------------------------------\n\nTitle: #{article.title}\nAuthor: #{article.author}\nDescription: #{self.text_wrap(article.description)}\n------------------------------------------------------------------\nType 'o' to view in a browser\n"
+  end
+
+  def prompt_user_to_take_action
+    puts "------------------------------------------------------------------\nType 'back' to review the list again\nType 'menu' to return to the options menu or 'exit' to quit\n------------------------------------------------------------------\n"
+  end
+
+  def prompt_user_to_archive_article
+    puts "Type 'a' to archive the article and return to article list"
+  end
+
+  def clear_screen
+    system "clear"
+  end
+
+  def text_wrap(s, width = 54)
+    s.gsub(/(.{1,#{width}})(\s+|\Z)/, "\\1\n")
+  end
+
+  def open_in_browser(article)
+    # on ubuntu
+    system("gnome-open '#{article.url}'")
+    # on mac
+    # system("open '#{article.url}'")
+  end
+
+  # @@urls = [
+  #   "http://rubyweekly.com/rss/16581bfg",
+  #   "http://javascriptweekly.com/rss/221bj275",
+  #   "https://nodeweekly.com/rss/"
+  # ]
+
   # def print_titles(topic)
   #   puts self.build_title_string(topic)
   #   self.prompt_user_to_select_article
   # end
 
-
-
   # def list_options
   #   puts "------------------------------------------------------------------\n  Option menu:\n------------------------------------------------------------------\n  Select a topic to list the latest articles\n  Type 'ruby' for Ruby and Rails news\n  Type 'js' for Javascript news\n  Type 'node' for NodeJS news\n  Type 'archive' to view article archive\n  Type 'exit' to quit\n------------------------------------------------------------------\n"
   # end
-
-  def print_article(article)
-    puts "------------------------------------------------------------------\n\nTitle: #{article.title}\nAuthor: #{article.author}\nDescription: #{self.text_wrap(article.description)}\n------------------------------------------------------------------\nType 'o' to view in a browser\n"
-  end
 
   # def build_title_string(topic)
   #   NewsTracker::Article.clear_all
@@ -182,14 +205,6 @@ class NewsTracker::CLI
   #   "Enter a number between 1-#{count} to pick an article\nType 'menu' to return to the options menu or 'exit' to quit\n------------------------------------------------------------------\n"
   # end
 
-  def prompt_user_to_take_action
-    puts "------------------------------------------------------------------\nType 'back' to review the list again\nType 'menu' to return to the options menu or 'exit' to quit\n------------------------------------------------------------------\n"
-  end
-
-  def prompt_user_to_archive_article
-    puts "Type 'a' to archive the article and return to article list"
-  end
-
   # def topic_string(number)
   #   str = ''
   #   case number
@@ -202,20 +217,5 @@ class NewsTracker::CLI
   #   end
   #   str
   # end
-
-  def clear_screen
-    system "clear"
-  end
-
-  def text_wrap(s, width = 54)
-    s.gsub(/(.{1,#{width}})(\s+|\Z)/, "\\1\n")
-  end
-
-  def open_in_browser(article)
-    # on ubuntu
-    system("gnome-open '#{article.url}'")
-    # on mac
-    # system("open '#{article.url}'")
-  end
 
 end
