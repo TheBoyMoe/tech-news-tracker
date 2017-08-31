@@ -57,7 +57,6 @@ RSpec.describe NewsTracker::CLI do
       #   $stdin = StringIO.new("ruby\n")
       # end
       #
-
       after do
         $stdin = STDIN
       end
@@ -70,8 +69,13 @@ RSpec.describe NewsTracker::CLI do
         # expect(subject.current_menu).to receive(:process_command)
         #
         # suppress_output{subject.display_article_list}
+        $stdin = StringIO.new("ruby\n")
 
-        # TODO test for a string
+        # test for a string
+        str = "  Displaying ruby news:"
+        suppress_output{subject.menu}
+        expect(subject.current_menu.display).to be_a(String)
+        expect(subject.current_menu.display).to include(str)
       end
 
       # it 'can pick an article from the list' do

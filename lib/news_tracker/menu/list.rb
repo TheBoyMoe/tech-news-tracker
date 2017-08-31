@@ -16,8 +16,7 @@ module NewsTracker
 
       def display
         # display the list of articles
-        puts build_article_list
-        puts prompt_user_to_select_article
+        build_article_list.concat(prompt_user_to_select_article)
       end
 
       def read_menu_command
