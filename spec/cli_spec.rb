@@ -54,15 +54,23 @@ RSpec.describe NewsTracker::CLI do
 
     context 'when the current menu changes to the list/archive' do
       # before do
-      #   $stdin = StringIO.new("ruby\n")
+      #   $stdin = StringIO.new("1")
       # end
-      #
+
       after do
         $stdin = STDIN
       end
 
+      it 'switch the current menu to be NewsTracker::Menu::List' do
+        $stdin = StringIO.new("ruby")
+
+        suppress_output{ subject.menu }
+
+        expect(subject.current_menu).to be_a(NewsTracker::Menu::List)
+      end
+
       it 'should display the ruby article lists' do
-        # expect(subject.current_menu).to receive(:display)
+        # expect(subject.current_menu).to receive(:display).and_call_original  ???
 
         # expect(subject.current_menu).to receive(:display)
         # expect(subject.current_menu).to receive(:read_menu_command)
@@ -72,7 +80,7 @@ RSpec.describe NewsTracker::CLI do
         $stdin = StringIO.new("ruby\n")
 
         # test for a string
-        str = "  Displaying ruby news:"
+        str = "Displaying ruby news:"
         suppress_output{subject.menu}
         expect(subject.current_menu.display).to be_a(String)
         expect(subject.current_menu.display).to include(str)
@@ -80,9 +88,10 @@ RSpec.describe NewsTracker::CLI do
 
       # it 'can pick an article from the list' do
       #   $stdin = StringIO.new('1')
+      #   suppress_output{subject.menu}
+      #   input = suppress_output{subject.display_article_list}
       #
-      #   expect(subject.current_menu).to receive(:read_menu_command)
-      #   #expect(subject.current_menu.read_menu_command).to eq(1)
+      #   expect(input).to eq('1')
       # end
 
       # it "or go back to the main options menu" do
@@ -91,6 +100,23 @@ RSpec.describe NewsTracker::CLI do
 
     end
 
+  end
+
+  describe 'display the selected article' do
+
+    it "ensure the article number is valid" do
+      count = NewsTracker::Article.all.size
+      suppress_output{expect(subject.current_menu.process_command).to be_between(1, count)}
+    end
+
+    it "given the article number, retrive the article from cache" do
+      expect(subject.current_menu.fetch_article).to be_a(NewsTracker::Article)
+    end
+
+    it "display the given article" do
+      article = NewsTracker::Article.all.first
+      expect(subject.current_menu.print_article).to output("------------------------------------------------------------------\n\nTitle: #{article.title}\nAuthor: #{article.author}\nDescription: #{subject.text_wrap(article.description)}\n------------------------------------------------------------------\nType 'o' to view in a browser\n").to_stdout
+    end
   end
 
   # let(:titles){[

@@ -85,10 +85,11 @@ class NewsTracker::CLI
     # display sub_menu or return to main
     if @current_menu.instance_of?(NewsTracker::Menu::List) || @current_menu.instance_of?(NewsTracker::Menu::Archive)
       puts @current_menu.display
+      # binding.pry
       @current_menu.read_menu_command
       @command = @current_menu.process_command
       # TODO outputs user input - select article or go back
-      #puts @command
+      @command
     elsif @current_menu.instance_of?(NewsTracker::Menu::Main)
       menu
     end
