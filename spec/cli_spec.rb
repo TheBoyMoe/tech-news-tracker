@@ -4,10 +4,12 @@ require 'stringio'
 RSpec.describe NewsTracker::CLI do
   describe '#menu' do
 
-    it 'prints the main menu' do
-      expect(subject.current_menu).to receive(:display)
 
-      subject.menu
+    it 'prints the main menu' do
+      # expect(subject.current_menu).to receive(:display)
+      # subject.menu
+      expect(subject.current_menu).to be_a(NewsTracker::Menu::Main)
+      expect{subject.current_menu.display}.to output("------------------------------------------------------------------\n  Option menu:\n------------------------------------------------------------------\n  Select a topic to list the latest articles\n  Type 'ruby' for Ruby and Rails news\n  Type 'js' for Javascript news\n  Type 'node' for NodeJS news\n  Type 'archive' to view article archive\n  Type 'exit' to quit\n------------------------------------------------------------------\n").to_stdout
     end
 
     context 'when I give a language command (js, ruby, node)' do
@@ -20,17 +22,18 @@ RSpec.describe NewsTracker::CLI do
       end
 
       it 'should change the current menu to be the article list' do
-        subject.menu
+        current_menu = subject.current_menu
+        current_menu.read_menu_command
+        current_menu = current_menu.process_command
 
-        expect(subject.current_menu).to be_a(NewsTracker::Menu::List)
+        expect(current_menu).to be_a(NewsTracker::Menu::List)
       end
 
-      it 'should display the ruby article lists' do
-        expect()
-
-        subject.sub_menu
-      end
-
+      # it 'should display the ruby article lists' do
+      #   str = 'Displaying ruby news:'
+      #   suppress_output{expect(subject.current_menu.display).to be_a(String)}
+      #   expect(subject.current_menu.display).to include(str)
+      # end
 
     end
 
@@ -38,13 +41,13 @@ RSpec.describe NewsTracker::CLI do
 
   describe '#sub_menu' do
 
-    context 'prints a list of articles'
+    context 'prints a list of articles' do
 
-      it 'I can pick an article from the list' do
+      it 'pick an article from the list' do
 
       end
 
-      it "I can go back to the main options menu" do
+      it "go back to the main options menu" do
 
       end
 

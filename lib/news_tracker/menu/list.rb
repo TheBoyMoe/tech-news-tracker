@@ -11,7 +11,7 @@ module NewsTracker
       def initialize(command)
         @command = command
         populate_article_cache
-        puts "cache size #{NewsTracker::Article.all.size}"
+        # puts "cache size #{NewsTracker::Article.all.size}"
       end
 
       def display
