@@ -25,6 +25,7 @@ module NewsTracker
       end
 
       def process_command
+        # TODO print the selected article
         @command
       end
 
