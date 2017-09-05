@@ -20,18 +20,49 @@ RSpec.describe NewsTracker::Menu::List do
 
   end
 
-  context 'prompt the user to select an article, or go back to the previous menu' do
+  descibe 'prompt the user to select an article, or go back to the previous menu' do
+    NewsTracker::Menu::List.new('ruby')
 
-    it "if the user enters a number, check that it's within the valid range" do
+    context "if the user enters a number" do
+      before do
+        $stdin = StringIO.new("1\n")
+      end
 
+      after do
+        $stdin = STDIN
+      end
+
+      it "check that it's within the valid range" do
+        # TODO
+      end
     end
 
-    it "if the user enters 'back', return to the previous menu" do
+    context "if the user enters 'back'" do
+      before do
+        $stdin = StringIO.new("back\n")
+      end
 
+      after do
+        $stdin = STDIN
+      end
+
+      it "return to the previous menu" do
+        # TODO
+      end
     end
 
-    it "if the entry is 'unknown', stay on the same menu" do
+    context "if the entry is 'unknown'" do
+      before do
+        $stdin = StringIO.new("'unknown'\n")
+      end
 
+      after do
+        $stdin = STDIN
+      end
+
+      it "stay on the same menu" do
+        # TODO
+      end
     end
 
   end

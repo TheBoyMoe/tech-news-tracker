@@ -8,9 +8,9 @@ module NewsTracker
         "https://nodeweekly.com/rss/"
       ]
 
-      def initialize(command)
+      def initialize(list_type)
         # retrieve the articles & populate the article cache
-        @command = command
+        @list_type = list_type
         populate_article_cache
       end
 
@@ -26,14 +26,21 @@ module NewsTracker
       def process_command
         # validate user input
           # - is it a number within range - select article or
-          # - did the user  enter 'menu'/'exit'
+          # - did the user  enter 'back'
           # - 'unknown' input
-        @command
+        if @command.to_i > 0 && @command.to_i <= NewsTracker::Article.all.size
+          # return the article
+          NewsTracker::Article.all[@command.to_i - 1]
+        elsif @command == 'back'
+          'back'
+        else
+          'unknown'
+        end
       end
 
 
       def build_article_list
-        str = "------------------------------------------------------------------\n  Displaying #{@command} news:\n------------------------------------------------------------------\n"
+        str = "------------------------------------------------------------------\nDisplaying #{@list_type} news:\n------------------------------------------------------------------\n"
         NewsTracker::Article.all.each.with_index(1) do |article, i|
           str += "  #{i}. #{article.title}\n"
         end
@@ -41,14 +48,14 @@ module NewsTracker
       end
 
       def prompt_user_to_select_article
-        str = "Enter a number between 1-#{NewsTracker::Article.all.size} to view more detail\n"
-        str += "Type back to return to the main menu\n"
-        str += '------------------------------------------------------------------\n'
+        str = "\nEnter a number between 1-#{NewsTracker::Article.all.size} to view more detail\n"
+        str += "Type 'back' to return to the main menu\n"
+        str += "------------------------------------------------------------------\n"
       end
 
       def rss_feed_url
         num = -1
-        case @command
+        case @list_type
         when 'ruby'
           num = 0
         when 'js'

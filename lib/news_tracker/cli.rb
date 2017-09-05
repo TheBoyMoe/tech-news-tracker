@@ -18,7 +18,7 @@ class NewsTracker::CLI
     # display options and wait for input
     @current_menu.display
     # read user input, set @command
-    @current_menu.read_menu_command
+    @command = @current_menu.read_menu_command
     # switch the current menu based on user input
     @current_menu = @current_menu.process_command
   end
@@ -30,9 +30,18 @@ class NewsTracker::CLI
       puts @current_menu.display
       # capture user input
       @current_menu.read_menu_command
-      # validate user input(@command)
-      @command = @current_menu.process_command
-
+      # validate user input
+      @result = @current_menu.process_command
+      binding.pry
+      if @result.instance_of?(NewsTracker::Article)
+        display_article
+      elsif @result == 'back'
+        @current_menu = NewsTracker::Menu::Main.new
+        menu
+      else
+        @current_menu = NewsTracker::Menu::List.new(@command)
+        display_article_list
+      end
     elsif @current_menu.instance_of?(NewsTracker::Menu::Main)
       menu
     end
@@ -40,7 +49,7 @@ class NewsTracker::CLI
 
   def display_article
     # TODO
-
+    puts "Display article #{@result.title}"
   end
 
   def greet_user
