@@ -12,10 +12,10 @@ RSpec.describe NewsTracker::RssFeed do
       articles = NewsTracker::Article.all
       expect(articles).to be_a(Array)
       expect(articles.first).to be_an_instance_of(NewsTracker::Article)
-      expect(articles.first.title).to eq("An Introduction to Concurrency Models in Ruby")
-      expect(articles.first.author).to eq("Universe Engineering")
-      expect(articles.first.description).to eq("In this first of a series, we see the differences between and pros and cons of fibers, EventMachine, threads and processes.")
-      expect(articles.first.url).to eq("https://engineering.universe.com/introduction-to-concurrency-models-with-ruby-part-i-550d0dbb970")
+      expect(articles.first.title).to eq("The Limits of Copy-on-Write: How Ruby Allocates Memory")
+      expect(articles.first.author).to eq("Brandur Leach")
+      expect(articles.first.description).to eq("How heap and object allocation work in Ruby, often leading to bloated sub-processes, and what’s on the roadmap to help.")
+      expect(articles.first.url).to eq("https://brandur.org/ruby-memory")
     end
   end
 

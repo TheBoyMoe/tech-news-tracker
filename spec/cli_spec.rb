@@ -2,37 +2,7 @@ require "spec_helper"
 require 'stringio'
 
 RSpec.describe NewsTracker::CLI do
-  describe '#menu' do
-    it 'prints the main menu' do
-      expect(subject.current_menu).to receive(:display)
-
-      subject.menu
-    end
-
-    context 'when I give a language command (js, ruby, node)' do
-      before do
-        $stdin = StringIO.new("ruby\n")
-      end
-
-      after do
-        $stdin = STDIN
-      end
-
-      it 'should change the current menu to be the article list' do
-        subject.menu
-
-        expect(subject.current_menu).to be_a(NewsTracker::Menu::List)
-      end
-
-      it 'should display the ruby article lists' do
-      end
-
-      it 'waits for some input in the terminal' do
-      end
-    end
-  end
-
-
+  
   let(:titles){[
     "1. Fixing bundler's dependency resolution algorithm",
     "2. A crash course in analysing memory usage in Ruby",
