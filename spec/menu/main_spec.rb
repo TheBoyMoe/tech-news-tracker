@@ -41,14 +41,36 @@ RSpec.describe NewsTracker::Menu::Main do
     end
 
     context "the user selects 'exit'" do
-      it "terminates app and displays 'Goodbye' message" do
+      before do
+        $stdin = StringIO.new("exit\n")
+      end
 
+      after do
+        $stdin = STDIN
+      end
+
+      it "terminates app and displays 'Goodbye' message" do
+        subject.read_menu_command
+
+        expect{subject.process_command}.to output("Goodbye!\n").to_stdout
       end
     end
 
     context "the user enters an unknown command" do
-      it "stay on the main menu, 'NewsTracker::Menu::Main'" do
+      before do
+        $stdin = StringIO.new("unknown\n")
+      end
 
+      after do
+        $stdin = STDIN
+      end
+
+      it "stay on the main menu, 'NewsTracker::Menu::Main', and output message 'Not a valid command'" do
+        subject.read_menu_command
+        current_menu = subject.process_command
+
+        expect{subject.process_command}.to output("Not a valid command\n").to_stdout
+        expect(current_menu).to be_a(NewsTracker::Menu::Main)
       end
     end
 
