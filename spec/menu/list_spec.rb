@@ -3,14 +3,19 @@ require 'stringio'
 
 RSpec.describe NewsTracker::Menu::List do
 
-  context 'when the article list is selected' do
+  context "when the 'ruby' article list is selected" do
+    NewsTracker::Menu::List.new('ruby')
 
-    it 'retrieve the list of downloaded articles' do
+    it "retrieve an array of 'ruby' article instances" do
+      articles = NewsTracker::Article.all
 
+      expect(articles).to be_a(Array)
+      expect(articles.first).to be_a_instance_of(NewsTracker::Article)
     end
 
-    it 'build a list of articles for display' do
-
+    it 'build a string of the article list for display' do
+      subject = NewsTracker::Menu::List.new('ruby')
+      expect(subject.build_article_list).to include('Displaying ruby news:')
     end
 
   end

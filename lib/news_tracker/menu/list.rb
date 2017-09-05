@@ -9,9 +9,9 @@ module NewsTracker
       ]
 
       def initialize(command)
+        # retrieve the articles & populate the article cache
         @command = command
         populate_article_cache
-        # puts "cache size #{NewsTracker::Article.all.size}"
       end
 
       def display
@@ -31,7 +31,7 @@ module NewsTracker
         @command
       end
 
-      private
+
       def build_article_list
         str = "------------------------------------------------------------------\n  Displaying #{@command} news:\n------------------------------------------------------------------\n"
         NewsTracker::Article.all.each.with_index(1) do |article, i|
