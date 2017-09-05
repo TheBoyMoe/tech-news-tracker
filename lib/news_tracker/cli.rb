@@ -26,13 +26,12 @@ class NewsTracker::CLI
   def display_article_list
     # display sub_menu or return to main
     if @current_menu.instance_of?(NewsTracker::Menu::List) || @current_menu.instance_of?(NewsTracker::Menu::Archive)
+      # display the article list
       puts @current_menu.display
-      # binding.pry
+      # capture user input
       @current_menu.read_menu_command
+      # validate user input(@command)
       @command = @current_menu.process_command
-      # TODO outputs user input
-      # - select article or
-      # - go back
 
     elsif @current_menu.instance_of?(NewsTracker::Menu::Main)
       menu

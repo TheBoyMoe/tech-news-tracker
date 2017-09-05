@@ -24,7 +24,10 @@ module NewsTracker
       end
 
       def process_command
-        # TODO print the selected article
+        # validate user input
+          # - is it a number within range - select article or
+          # - did the user  enter 'menu'/'exit'
+          # - 'unknown' input
         @command
       end
 
