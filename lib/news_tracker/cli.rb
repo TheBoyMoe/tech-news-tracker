@@ -15,70 +15,12 @@ class NewsTracker::CLI
   end
 
   def menu
-    #binding.pry
-    @current_menu.display # display options and wait for input
-    @current_menu.read_menu_command # read user input, set @command
+    # display options and wait for input
+    @current_menu.display
+    # read user input, set @command
+    @current_menu.read_menu_command
+    # switch the current menu based on user input
     @current_menu = @current_menu.process_command
-      # list_options
-    # input = gets.strip.downcase
-    # topic = -1
-    # @article_num = 0
-    # @article = nil
-    # @viewing_archive = false
-    # while input != 'exit'
-    #   self.clear_screen
-    #   if input == 'ruby'
-    #     self.print_titles(0)
-    #     topic = 0
-    #   elsif input == 'js'
-    #     self.print_titles(1)
-    #     topic = 1
-    #   elsif input == 'node'
-    #     self.print_titles(2)
-    #     topic = 2
-    #   elsif input == 'menu'
-    #     self.list_options
-    #   elsif input == 'list'
-    #     @viewing_archive = false
-    #     self.print_titles(topic)
-    #   elsif input == 'archive'
-    #     @viewing_archive = true
-    #     self.print_archive_list
-    #   elsif input == 'back'
-    #     if @viewing_archive
-    #       self.print_archive_list
-    #     else
-    #       @viewing_archive = false
-    #       self.print_titles(topic)
-    #     end
-    #   elsif input == 'a'
-    #     # insert the article into the database
-    #     if @article != nil
-    #       NewsTracker::Article.find_or_insert(@article)
-    #     end
-    #     self.print_titles(topic) # return to article list
-    #   elsif (input.to_i > 0 && input.to_i <= NewsTracker::Article.all.size)
-    #     @viewing_archive = false
-    #     @article_num = input.to_i
-    #     @article = NewsTracker::Article.all[@article_num - 1]
-    #     self.print_article(@article)
-    #     self.prompt_user_to_archive_article
-    #     self.prompt_user_to_take_action
-    #   elsif @article_num > 0 && input == 'o'
-    #     self.open_in_browser(@article)
-    #     sleep 1
-    #     if @viewing_archive
-    #       self.prompt_user_to_take_action
-    #     else
-    #       self.prompt_user_to_archive_article
-    #       self.prompt_user_to_take_action
-    #     end
-    #   else
-    #     puts "Input not recognised, try again\nType 'menu' to return to the options menu or 'exit' to quit"
-    #   end
-    #   input = gets.strip
-    # end
-    # puts 'Goodbye!'
   end
 
   def display_article_list
@@ -87,11 +29,18 @@ class NewsTracker::CLI
       @current_menu.display
       @current_menu.read_menu_command
       @command = @current_menu.process_command
-      # TODO outputs user input - select article or go back
-      #puts @command
+      # TODO outputs user input
+      # - select article or
+      # - go back
+
     elsif @current_menu.instance_of?(NewsTracker::Menu::Main)
       menu
     end
+  end
+
+  def display_article
+    # TODO
+
   end
 
   def greet_user
@@ -166,57 +115,5 @@ class NewsTracker::CLI
     # on mac
     # system("open '#{article.url}'")
   end
-
-  # @@urls = [
-  #   "http://rubyweekly.com/rss/16581bfg",
-  #   "http://javascriptweekly.com/rss/221bj275",
-  #   "https://nodeweekly.com/rss/"
-  # ]
-
-  # def print_titles(topic)
-  #   puts self.build_title_string(topic)
-  #   self.prompt_user_to_select_article
-  # end
-
-  # def list_options
-  #   puts "------------------------------------------------------------------\n  Option menu:\n------------------------------------------------------------------\n  Select a topic to list the latest articles\n  Type 'ruby' for Ruby and Rails news\n  Type 'js' for Javascript news\n  Type 'node' for NodeJS news\n  Type 'archive' to view article archive\n  Type 'exit' to quit\n------------------------------------------------------------------\n"
-  # end
-
-  # def build_title_string(topic)
-  #   NewsTracker::Article.clear_all
-  #   self.fetch_articles(topic)
-  #   topic_str = topic_string(topic)
-  #   str = "------------------------------------------------------------------\n  Displaying #{topic_str} news:\n------------------------------------------------------------------\n"
-  #   NewsTracker::Article.all.each.with_index(1) do |article, i|
-  #     str += "  #{i}. #{article.title}\n"
-  #   end
-  #   str += "------------------------------------------------------------------"
-  # end
-
-  # def fetch_articles(topic)
-  #     NewsTracker::RssFeed.new(@@urls[topic]).create_article_instances_from_hashes
-  # end
-
-  # def prompt_user_to_select_article
-  #   count = NewsTracker::Article.all.count
-  #   puts build_prompt_user_string(count)
-  # end
-
-  # def build_prompt_user_string(count)
-  #   "Enter a number between 1-#{count} to pick an article\nType 'menu' to return to the options menu or 'exit' to quit\n------------------------------------------------------------------\n"
-  # end
-
-  # def topic_string(number)
-  #   str = ''
-  #   case number
-  #   when 0
-  #     str = 'Ruby'
-  #   when 1
-  #     str = 'Javascript'
-  #   when 2
-  #     str = 'NodeJS'
-  #   end
-  #   str
-  # end
 
 end
