@@ -35,11 +35,10 @@ class NewsTracker::CLI
       # binding.pry # DEBUG
       if @result.instance_of?(NewsTracker::Article)
         display_article
-      elsif @result == 'back'
-        @current_menu = NewsTracker::Menu::Main.new
+      elsif @result.instance_of?(NewsTracker::Menu::Main)
+        @current_menu = @result
         menu
       else
-        # @current_menu = NewsTracker::Menu::List.new(@command)
         display_list
       end
     elsif @current_menu.instance_of?(NewsTracker::Menu::Main)

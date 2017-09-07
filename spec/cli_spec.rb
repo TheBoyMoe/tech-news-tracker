@@ -50,7 +50,7 @@ RSpec.describe NewsTracker::CLI do
 
   end
 
-  describe '#display_article_list' do
+  describe '#display_list' do
 
     context "when a user enters 'ruby'" do
       before do
@@ -62,8 +62,12 @@ RSpec.describe NewsTracker::CLI do
       end
 
       it 'should display a list of articles related to ruby news' do
-        # check for a string
-        # check it includes 'Displaying ruby news:'
+        subject.current_menu.read_menu_command
+        current_menu = subject.current_menu.process_command
+        str = current_menu.display
+
+        expect(str).to be_a(String)
+        expect(str).to include('Displaying ruby news:')
       end
 
     end
@@ -73,13 +77,21 @@ RSpec.describe NewsTracker::CLI do
   describe '#display_article' do
 
     context 'should display the selected article' do
+      before do
+        $stdin = StringIO.new("1\n")
+      end
+
+      after do
+        $stdin = STDIN
+      end
+
       it 'an article should contain a title, author and description field' do
+
+
         # str = subject.display_article
-        # # check that it includes 'title'
+
         # expect(str).to include('Title')
-        # # check that it includes 'author'
         # expect(str).to include('Author')
-        # # check that it includes 'content'
         # expect(str).to include('Description')
       end
     end

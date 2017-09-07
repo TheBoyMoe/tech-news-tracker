@@ -20,10 +20,10 @@ RSpec.describe NewsTracker::Menu::List do
 
   end
 
-  descibe 'prompt the user to select an article, or go back to the previous menu' do
-    NewsTracker::Menu::List.new('ruby')
+  describe 'prompt the user to select an article, or go back to the previous menu' do
+    subject = NewsTracker::Menu::List.new('ruby')
 
-    context "if the user enters a number" do
+    context "if the user enters a valid number" do
       before do
         $stdin = StringIO.new("1\n")
       end
@@ -32,8 +32,11 @@ RSpec.describe NewsTracker::Menu::List do
         $stdin = STDIN
       end
 
-      it "check that it's within the valid range" do
-        # TODO
+      it "that an article instance is returned" do
+        subject.read_menu_command
+        result = subject.process_command
+
+        expect(result).to be_a_instance_of(NewsTracker::Article)
       end
     end
 
@@ -46,8 +49,11 @@ RSpec.describe NewsTracker::Menu::List do
         $stdin = STDIN
       end
 
-      it "return to the previous menu" do
-        # TODO
+      it "that an instance of NewsTracker::Menu::Main is returned" do
+        subject.read_menu_command
+        result = subject.process_command
+
+        expect(result).to be_a_instance_of(NewsTracker::Menu::Main)
       end
     end
 
@@ -61,7 +67,10 @@ RSpec.describe NewsTracker::Menu::List do
       end
 
       it "stay on the same menu" do
-        # TODO
+        subject.read_menu_command
+        result = subject.process_command
+
+        expect(result).to be_a_instance_of(NewsTracker::Menu::List)  
       end
     end
 

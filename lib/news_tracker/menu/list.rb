@@ -32,9 +32,9 @@ module NewsTracker
           # return the article
           NewsTracker::Article.all[@command.to_i - 1]
         elsif @command == 'back'
-          'back'
+          NewsTracker::Menu::Main.new
         else
-          'unknown'
+          self
         end
       end
 
