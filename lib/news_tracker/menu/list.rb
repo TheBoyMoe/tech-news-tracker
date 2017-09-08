@@ -1,6 +1,8 @@
+require_relative "./common"
+
 module NewsTracker
   module Menu
-    class List
+    class List < Common
 
       @@urls = [
         "http://rubyweekly.com/rss/16581bfg",
@@ -15,21 +17,16 @@ module NewsTracker
       end
 
       def display
-        # build_article_list.concat(prompt_user_to_select_article)
         <<~HEREDOC
           #{line_break}
           #{opening_line}
           #{line_break}
-          #{build_article_list}
+          #{build_article_list(NewsTracker::Article.all)}
           #{line_break}
-          #{select_article_number}
+          #{select_article_number(NewsTracker::Article.all.size)}
           #{prompt_user_to_go_back}
           #{line_break}
         HEREDOC
-      end
-
-      def read_menu_command
-        @command = $stdin.gets.strip.downcase
       end
 
       def process_command
@@ -48,13 +45,6 @@ module NewsTracker
       end
 
       private
-        def build_article_list
-          str = ""
-          NewsTracker::Article.all.each.with_index(1) do |article, i|
-            str += "  #{i}. #{article.title}\n"
-          end
-          str.gsub(/\n$/, '')
-        end
 
         def rss_feed_url
           num = -1
@@ -80,18 +70,6 @@ module NewsTracker
 
         def opening_line
           "Displaying #{@list_type} news:"
-        end
-
-        def select_article_number
-          "Enter a number between 1-#{NewsTracker::Article.all.size} to view more detail"
-        end
-
-        def prompt_user_to_go_back
-          "Type 'back' to return to the main menu"
-        end
-
-        def line_break
-          "------------------------------------------------------------------"
         end
 
     end

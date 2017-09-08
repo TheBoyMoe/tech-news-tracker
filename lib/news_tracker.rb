@@ -11,6 +11,7 @@ module NewsTracker
   require 'news_tracker/menu/main'
   require 'news_tracker/menu/list'
   require 'news_tracker/menu/archive'
+  require 'news_tracker/menu/common'
   require 'news_tracker/cli'
   require 'news_tracker/article'
 end
