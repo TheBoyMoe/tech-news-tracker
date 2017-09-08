@@ -2,61 +2,75 @@ require "spec_helper"
 require 'stringio'
 
 RSpec.describe NewsTracker::CLI do
-  
-  let(:titles){[
-    "1. Fixing bundler's dependency resolution algorithm",
-    "2. A crash course in analysing memory usage in Ruby",
-    "3. Redis 4.0 now on RedisGreen",
-    "4. Looking into CSFR protection in Rails",
-    "5. Advanced anumeration in Ruby",
-    "6. Why it's just lazy to bad mouth Rails",
-    "7. Effectively managing localization files in Rails"
-  ]}
 
-  describe '#greet_user' do
-    it "Greet the user when the app launches" do
-      expect{subject.greet_user}.to output("------------------------------------------------------------------\n\n  Welcome to News Tracker - Ruby/Rails/Javascript and Node News!\n\n").to_stdout
+  describe '#menu' do
+
+    it 'prints the main menu' do
+      str = subject.current_menu.display
+
+      expect(subject.current_menu).to be_a(NewsTracker::Menu::Main)
+      expect(str).to include("Option menu:")
+      expect(str).to include("Select a topic to list the latest articles")
+      expect(str).to include("Type 'ruby' for Ruby and Rails news")
+      expect(str).to include("Type 'js' for Javascript news")
+      expect(str).to include("Type 'node' for NodeJS news")
+      expect(str).to include("Type 'archive' to view article archive")
+      expect(str).to include("Type 'exit' to quit")
     end
+
   end
 
-  describe '#list_options' do
-    it "List the available options" do
-      expect{subject.list_options}.to output("------------------------------------------------------------------\n  Option menu:\n------------------------------------------------------------------\n  Select a topic to list the latest articles\n  Type 'ruby' for Ruby and Rails news\n  Type 'js' for Javascript news\n  Type 'node' for NodeJS news\n  Type 'archive' to view article archive\n  Type 'exit' to quit\n------------------------------------------------------------------\n").to_stdout
+  describe '#display_list' do
+
+    context "when a user enters 'ruby'" do
+      before do
+        $stdin = StringIO.new("ruby\n")
+      end
+
+      after do
+        $stdin = STDIN
+      end
+
+      it 'should display a list of articles related to ruby news' do
+        subject.current_menu.read_menu_command
+        current_menu = subject.current_menu.process_command
+        str = current_menu.display
+
+        expect(str).to be_a(String)
+        expect(str).to include('Displaying ruby news:')
+      end
+
     end
+
   end
 
-  describe '#build_title_string' do
-    it "should return a string that includes 'Displaying Ruby news:'" do
-      str = 'Displaying Ruby news:'
-      expect(subject.build_title_string(0)).to be_a(String)
-      expect(subject.build_title_string(0)).to include(str)
-    end
-  end
+  describe 'display an article to the user' do
 
-  describe '#prompt_user_to_select_article' do
-    it "prompt user to pick an article or return to the previous menu" do
-      count = NewsTracker::Article.all.count
-      expect{subject.prompt_user_to_select_article}.to output("Enter a number between 1-#{count} to pick an article\nType 'menu' to return to the options menu or 'exit' to quit\n------------------------------------------------------------------\n").to_stdout
-    end
-  end
+    context 'should display the selected article' do
+      before do
+        $stdin = StringIO.new("1")
+      end
 
-  describe '#print_article' do
-    it "print the selected article to the screen" do
-      article = NewsTracker::Article.all.first
-      expect{subject.print_article(article)}.to output("------------------------------------------------------------------\n\nTitle: #{article.title}\nAuthor: #{article.author}\nDescription: #{subject.text_wrap(article.description)}\n------------------------------------------------------------------\nType 'o' to view in a browser\n").to_stdout
-    end
-  end
+      after do
+        $stdin = STDIN
+      end
 
-  describe '#prompt_user_to_take_action' do
-    it "prompt user to take action following the display of article details" do
-      expect{subject.prompt_user_to_take_action}.to output("------------------------------------------------------------------\nType 'back' to review the list again\nType 'menu' to return to the options menu or 'exit' to quit\n------------------------------------------------------------------\n").to_stdout
-    end
-  end
+      it 'an article should contain a title, author and description field and prompt the user to take action' do
+        current_menu = NewsTracker::Menu::List.new('ruby')
+        current_menu.read_menu_command
+        article = current_menu.process_command
+        article_string = subject.display_article(article)
 
-  describe '#prompt_user_to_archive_article' do
-    it "promt the user to archive the recently opened article" do
-      expect{subject.prompt_user_to_archive_article}.to output("Type 'a' to archive the article and return to article list\n").to_stdout
+        expect(article_string).to include('Title:')
+        expect(article_string).to include('Author:')
+        expect(article_string).to include('Description:')
+        # expect(article_string).to include("Type 'a' to archive the article and return to article list")
+        expect(article_string).to include("Type 'o' to view in a browser")
+        expect(article_string).to include("Type 'back' to review the list again")
+      end
+
     end
+
   end
 
 end

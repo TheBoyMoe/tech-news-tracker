@@ -90,7 +90,7 @@ class NewsTracker::RssFeed
         article = {}
         array.each.with_index(1) do |div, i|
           if i == 1
-            article[:author] = div.text.strip
+            article[:author] = div.text.gsub('Sponsor', '').gsub(/\n+/, '')
           elsif i == 2
             article[:url] = div.css('a').attr('href').text.strip
             article[:title] = div.css('a').text.strip
