@@ -74,26 +74,31 @@ RSpec.describe NewsTracker::CLI do
 
   end
 
-  describe '#display_article' do
+  describe 'display an article to the user' do
 
     context 'should display the selected article' do
       before do
-        $stdin = StringIO.new("1\n")
+        $stdin = StringIO.new("1")
       end
 
       after do
         $stdin = STDIN
       end
 
-      it 'an article should contain a title, author and description field' do
+      it 'an article should contain a title, author and description field and prompt the user to take action' do
+        current_menu = NewsTracker::Menu::List.new('ruby')
+        current_menu.read_menu_command
+        article = current_menu.process_command
+        article_string = subject.display_article(article)
 
-
-        # str = subject.display_article
-
-        # expect(str).to include('Title')
-        # expect(str).to include('Author')
-        # expect(str).to include('Description')
+        expect(article_string).to include('Title:')
+        expect(article_string).to include('Author:')
+        expect(article_string).to include('Description:')
+        expect(article_string).to include("Type 'a' to archive the article and return to article list")
+        expect(article_string).to include("Type 'o' to view in a browser")
+        expect(article_string).to include("Type 'back' to review the list again")
       end
+
     end
 
   end

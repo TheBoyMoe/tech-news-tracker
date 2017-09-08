@@ -31,12 +31,12 @@ class NewsTracker::CLI
       # capture user input
       @current_menu.read_menu_command
       # validate user input
-      @result = @current_menu.process_command
+      result = @current_menu.process_command
       # binding.pry # DEBUG
-      if @result.instance_of?(NewsTracker::Article)
-        display_article
-      elsif @result.instance_of?(NewsTracker::Menu::Main)
-        @current_menu = @result
+      if result.instance_of?(NewsTracker::Article)
+        puts display_article(result)
+      elsif result.instance_of?(NewsTracker::Menu::Main)
+        @current_menu = result
         menu
       else
         display_list
@@ -46,17 +46,59 @@ class NewsTracker::CLI
     end
   end
 
-  def display_article
-    # TODO
-    puts "Display article #{@result.title}"
+  def display_article(article)
+    <<~HEREDOC
+      #{line_break}
+      #{build_article(article)}
+      #{line_break}
+      #{prompt_user_to_open}
+      #{prompt_user_to_archive}
+      #{line_break}
+      #{prompt_user_to_go_back}
+      #{line_break}
+    HEREDOC
   end
 
-  def greet_user
-    puts "------------------------------------------------------------------\n\n  Welcome to News Tracker - Ruby/Rails/Javascript and Node News!\n\n"
+  def build_article(article)
+    "\nTitle: #{article.title}\nAuthor: #{article.author}\nDescription: #{text_wrap(article.description)}"
   end
 
+  private
 
+    def greet_user
+      puts "------------------------------------------------------------------\n\n  Welcome to News Tracker - Ruby/Rails/Javascript and Node News!\n\n"
+    end
 
+    def prompt_user_to_archive
+      "Type 'a' to archive the article and return to article list"
+    end
+
+    def prompt_user_to_open
+      "Type 'o' to view in a browser"
+    end
+
+    def prompt_user_to_go_back
+      "Type 'back' to review the list again"
+    end
+
+    def line_break
+      "------------------------------------------------------------------"
+    end
+
+    def clear_screen
+      system "clear"
+    end
+
+    def text_wrap(s, width = 60)
+      s.gsub(/(.{1,#{width}})(\s+|\Z)/, "\\1\n")
+    end
+
+    def open_in_browser(article)
+      # on ubuntu
+      system("gnome-open '#{article.url}'")
+      # on mac
+      # system("open '#{article.url}'")
+    end
 
 ################################################################################
 
@@ -97,31 +139,14 @@ class NewsTracker::CLI
     puts build_prompt_user_string(count)
   end
 
-  def print_article(article)
-    puts "------------------------------------------------------------------\n\nTitle: #{article.title}\nAuthor: #{article.author}\nDescription: #{self.text_wrap(article.description)}\n------------------------------------------------------------------\nType 'o' to view in a browser\n"
-  end
+  # def prompt_user_to_take_action
+  #   puts "------------------------------------------------------------------\nType 'back' to review the list again\nType 'menu' to return to the options menu or 'exit' to quit\n------------------------------------------------------------------\n"
+  # end
 
-  def prompt_user_to_take_action
-    puts "------------------------------------------------------------------\nType 'back' to review the list again\nType 'menu' to return to the options menu or 'exit' to quit\n------------------------------------------------------------------\n"
-  end
+  # def prompt_user_to_archive_article
+  #   puts "Type 'a' to archive the article and return to article list"
+  # end
 
-  def prompt_user_to_archive_article
-    puts "Type 'a' to archive the article and return to article list"
-  end
 
-  def clear_screen
-    system "clear"
-  end
-
-  def text_wrap(s, width = 54)
-    s.gsub(/(.{1,#{width}})(\s+|\Z)/, "\\1\n")
-  end
-
-  def open_in_browser(article)
-    # on ubuntu
-    system("gnome-open '#{article.url}'")
-    # on mac
-    # system("open '#{article.url}'")
-  end
 
 end
