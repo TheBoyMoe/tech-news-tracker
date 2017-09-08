@@ -9,7 +9,8 @@ class NewsTracker::CLI
   end
 
   def call
-    greet_user
+    print line_break
+    print greet_user
     menu
   end
 
@@ -35,6 +36,7 @@ class NewsTracker::CLI
       # binding.pry # DEBUG
       if result.instance_of?(NewsTracker::Article)
         puts display_article(result)
+        process_article_input(result)
       elsif result.instance_of?(NewsTracker::Menu::Main)
         @current_menu = result
         menu
@@ -59,14 +61,26 @@ class NewsTracker::CLI
     HEREDOC
   end
 
-  def build_article(article)
-    "\nTitle: #{article.title}\nAuthor: #{article.author}\nDescription: #{text_wrap(article.description)}"
-  end
+
 
   private
+    def process_article_input(article)
+      input = @current_menu.read_menu_command
+      if input == 'o'
+        open_in_browser(article)
+      elsif input == 'a'
+        NewsTracker::Article.find_or_insert(article)
+        puts "article saved..... returning to list"
+      end
+      display_list
+    end
+
+    def build_article(article)
+      "\nTitle: #{article.title}\nAuthor: #{article.author}\nDescription: #{text_wrap(article.description)}"
+    end
 
     def greet_user
-      puts "------------------------------------------------------------------\n\n  Welcome to News Tracker - Ruby/Rails/Javascript and Node News!\n\n"
+      "\n\n  Welcome to News Tracker - Ruby/Rails/Javascript and Node News!\n\n"
     end
 
     def prompt_user_to_archive
@@ -138,15 +152,5 @@ class NewsTracker::CLI
     count = NewsTracker::Article.fetch_archive.size
     puts build_prompt_user_string(count)
   end
-
-  # def prompt_user_to_take_action
-  #   puts "------------------------------------------------------------------\nType 'back' to review the list again\nType 'menu' to return to the options menu or 'exit' to quit\n------------------------------------------------------------------\n"
-  # end
-
-  # def prompt_user_to_archive_article
-  #   puts "Type 'a' to archive the article and return to article list"
-  # end
-
-
 
 end
