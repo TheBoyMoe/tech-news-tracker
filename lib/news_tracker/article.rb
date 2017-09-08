@@ -67,7 +67,7 @@ class NewsTracker::Article
 
   def self.fetch_archive
     DB[:conn].execute("SELECT * FROM articles").map do |row|
-      self.new_from_db(row)
+      new_from_db(row)
     end
   end
 

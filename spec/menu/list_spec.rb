@@ -4,9 +4,10 @@ require 'stringio'
 RSpec.describe NewsTracker::Menu::List do
 
   context "when the 'ruby' article list is selected" do
+    # fetch the articles & populate the article cache
     NewsTracker::Menu::List.new('ruby')
 
-    it "retrieve an array of 'ruby' article instances" do
+    it "retrieve an array of article instances" do
       articles = NewsTracker::Article.all
 
       expect(articles).to be_a(Array)
@@ -15,7 +16,7 @@ RSpec.describe NewsTracker::Menu::List do
 
     it 'build a string of the article list for display' do
       subject = NewsTracker::Menu::List.new('ruby')
-      expect(subject.build_article_list).to include('Displaying ruby news:')
+      expect(subject.display).to include('Displaying ruby news:')
     end
 
   end
@@ -70,7 +71,7 @@ RSpec.describe NewsTracker::Menu::List do
         subject.read_menu_command
         result = subject.process_command
 
-        expect(result).to be_a_instance_of(NewsTracker::Menu::List)  
+        expect(result).to be_a_instance_of(NewsTracker::Menu::List)
       end
     end
 

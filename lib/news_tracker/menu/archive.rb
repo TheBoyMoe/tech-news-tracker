@@ -22,12 +22,11 @@ module NewsTracker
 
       end
 
+      def fetch_articles
+        NewsTracker::Article.fetch_archive
+      end
+
       private
-
-        def fetch_articles
-          NewsTracker::Article.fetch_archive
-        end
-
         def opening_line
           "Displaying list of archived articles"
         end
