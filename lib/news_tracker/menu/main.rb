@@ -6,7 +6,18 @@ module NewsTracker
       end
 
       def display
-        puts list_options
+        <<~HEREDOC
+          ------------------------------------------------------------------
+            Option menu:
+          ------------------------------------------------------------------
+            Select a topic to list the latest articles
+            Type 'ruby' for Ruby and Rails news
+            Type 'js' for Javascript news
+            Type 'node' for NodeJS news
+            Type 'archive' to view article archive
+            Type 'exit' to quit
+          ------------------------------------------------------------------
+        HEREDOC
       end
 
       def read_menu_command
@@ -39,10 +50,6 @@ module NewsTracker
 
       def is_archive?
         @command == 'archive'
-      end
-
-      def list_options
-        "------------------------------------------------------------------\n  Option menu:\n------------------------------------------------------------------\n  Select a topic to list the latest articles\n  Type 'ruby' for Ruby and Rails news\n  Type 'js' for Javascript news\n  Type 'node' for NodeJS news\n  Type 'archive' to view article archive\n  Type 'exit' to quit\n------------------------------------------------------------------\n"
       end
 
     end

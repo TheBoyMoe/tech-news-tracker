@@ -16,7 +16,7 @@ class NewsTracker::CLI
 
   def menu
     # display options and wait for input
-    @current_menu.display
+    print @current_menu.display
     # read user input, set @command
     @current_menu.read_menu_command
     # switch the current menu based on user input
@@ -28,12 +28,11 @@ class NewsTracker::CLI
     # display sub_menu or return to main
     if @current_menu.instance_of?(NewsTracker::Menu::List) || @current_menu.instance_of?(NewsTracker::Menu::Archive)
       # display the article list
-      puts @current_menu.display
+      print @current_menu.display
       # capture user input
       @current_menu.read_menu_command
       # validate user input
       result = @current_menu.process_command
-      # binding.pry # DEBUG
       if result.instance_of?(NewsTracker::Article)
         puts display_article(result)
         process_article_input(result)
@@ -49,18 +48,29 @@ class NewsTracker::CLI
   end
 
   def display_article(article)
-    <<~HEREDOC
-      #{line_break}
-      #{build_article(article)}
-      #{line_break}
-      #{prompt_user_to_open}
-      #{prompt_user_to_archive}
-      #{line_break}
-      #{prompt_user_to_go_back}
-      #{line_break}
-    HEREDOC
+    if @current_menu.instance_of? NewsTracker::Menu::List
+      <<~HEREDOC
+        #{line_break}
+        #{build_article(article)}
+        #{line_break}
+        #{prompt_user_to_open}
+        #{prompt_user_to_archive}
+        #{line_break}
+        #{prompt_user_to_go_back}
+        #{line_break}
+      HEREDOC
+    else
+      <<~HEREDOC
+        #{line_break}
+        #{build_article(article)}
+        #{line_break}
+        #{prompt_user_to_open}
+        #{line_break}
+        #{prompt_user_to_go_back}
+        #{line_break}
+      HEREDOC
+    end
   end
-
 
 
   private
@@ -76,7 +86,7 @@ class NewsTracker::CLI
     end
 
     def build_article(article)
-      "\nTitle: #{article.title}\nAuthor: #{article.author}\nDescription: #{text_wrap(article.description)}"
+      "Title: #{article.title}\nAuthor: #{article.author}\nDescription: #{text_wrap(article.description)}"
     end
 
     def greet_user
@@ -104,7 +114,7 @@ class NewsTracker::CLI
     end
 
     def text_wrap(s, width = 60)
-      s.gsub(/(.{1,#{width}})(\s+|\Z)/, "\\1\n")
+      s.gsub(/(.{1,#{width}})(\s+|\Z)/, "\\1")
     end
 
     def open_in_browser(article)
@@ -113,44 +123,5 @@ class NewsTracker::CLI
       # on mac
       # system("open '#{article.url}'")
     end
-
-################################################################################
-
-  def print_archive_list
-    if NewsTracker::Article.fetch_archive.size > 0
-      puts self.build_archive_list_string
-      self.prompt_user_to_make_selection
-      input = gets.strip.to_i
-      if input > 0 && input <= NewsTracker::Article.fetch_archive.size
-        @viewing_archive = true
-        @article_num = input
-        @article = NewsTracker::Article.fetch_article_from_archive(@article_num)
-        self.clear_screen
-        self.print_article(@article)
-        self.prompt_user_to_take_action
-      elsif input > NewsTracker::Article.fetch_archive.size
-        puts "input not recognised"
-        sleep 1
-        self.clear_screen
-        self.print_archive_list
-      end
-    else
-      puts "------------------------------------------------------------------\nNo articles found\nType 'menu' to return to the options menu or 'exit' to quit\n------------------------------------------------------------------\n"
-    end
-  end
-
-  def build_archive_list_string
-    str = "------------------------------------------------------------------\n  Displaying archive list:\n------------------------------------------------------------------\n"
-    # fetch all archived articles from the database & print a list of archived articles
-    NewsTracker::Article.fetch_archive.each.with_index(1) do |article, i|
-      str += "  #{i}. #{article.title}\n"
-    end
-    str += "------------------------------------------------------------------\n"
-  end
-
-  def prompt_user_to_make_selection
-    count = NewsTracker::Article.fetch_archive.size
-    puts build_prompt_user_string(count)
-  end
 
 end

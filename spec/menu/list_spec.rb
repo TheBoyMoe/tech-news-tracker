@@ -33,11 +33,11 @@ RSpec.describe NewsTracker::Menu::List do
         $stdin = STDIN
       end
 
-      it "that an article instance is returned" do
+      it "an article instance is returned" do
         subject.read_menu_command
-        result = subject.process_command
+        article = subject.process_command
 
-        expect(result).to be_a_instance_of(NewsTracker::Article)
+        expect(article).to be_a_instance_of(NewsTracker::Article)
       end
     end
 
@@ -50,7 +50,7 @@ RSpec.describe NewsTracker::Menu::List do
         $stdin = STDIN
       end
 
-      it "that an instance of NewsTracker::Menu::Main is returned" do
+      it "an instance of NewsTracker::Menu::Main is returned" do
         subject.read_menu_command
         result = subject.process_command
 

@@ -40,4 +40,61 @@ RSpec.describe NewsTracker::Menu::Archive do
     end
   end
 
+  describe 'prompt the user to select an article, or go back to the previous menu' do
+    article = NewsTracker::Article.new
+    article.title = 'ES6, The future of JS'
+    article.author = 'John Smith'
+
+    context 'if the user enters a valid number' do
+      before do
+        $stdin = StringIO.new("1\n")
+      end
+
+      after do
+        $stdin = STDIN
+      end
+
+      it " article instance is returned" do
+        NewsTracker::Article.find_or_insert(article)
+        subject.read_menu_command
+        article = subject.process_command
+
+        expect(article).to be_a_instance_of(NewsTracker::Article)
+      end
+    end
+
+    context "if the user enters 'back'" do
+      before do
+        $stdin = StringIO.new("back\n")
+      end
+
+      after do
+        $stdin = STDIN
+      end
+
+      it "return an instance of NewsTracker::Menu::Main" do
+        subject.read_menu_command
+        result = subject.process_command
+
+        expect(result).to be_a_instance_of(NewsTracker::Menu::Main)
+      end
+    end
+
+    context "if the entry is 'unknown'" do
+      before do
+        $stdin = StringIO.new("'unknown'\n")
+      end
+
+      after do
+        $stdin = STDIN
+      end
+
+      it "stay on the same menu" do
+        subject.read_menu_command
+        result = subject.process_command
+
+        expect(result).to be_a_instance_of(NewsTracker::Menu::Archive)
+      end
+    end
+  end
 end

@@ -18,8 +18,13 @@ module NewsTracker
       end
 
       def process_command
-        # TODO
-
+        if @command.to_i > 0 && @command.to_i <= fetch_articles.size
+          NewsTracker::Article.fetch_article_from_archive(@command.to_i)
+        elsif @command == 'back'
+          NewsTracker::Menu::Main.new
+        else
+          self
+        end
       end
 
       def fetch_articles
