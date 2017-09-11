@@ -1,7 +1,7 @@
 require 'pry'
 
 class NewsTracker::CLI
-  attr_reader :current_menu
+  attr_accessor :current_menu
 
   def initialize
     @current_menu = NewsTracker::Menu::Main.new
@@ -11,7 +11,8 @@ class NewsTracker::CLI
     print line_break
     print greet_user
     print main_menu
-    capture_main_menu_input
+    print article_list
+    print article
   end
 
   def main_menu
@@ -20,65 +21,71 @@ class NewsTracker::CLI
     current_menu.display
   end
 
-  def capture_main_menu_input
-    # read user input, set @command
+  def article_list
+    # read user input from main menu, set @command
     current_menu.read_menu_command
     # switch the current menu based on user input
     @current_menu = current_menu.process_command
-    display_list
-  end
-
-  def display_list
-    # display sub_menu or return to main
     if current_menu.instance_of?(NewsTracker::Menu::List) || current_menu.instance_of?(NewsTracker::Menu::Archive)
-      # display the article list
-      print current_menu.display
-      # capture user input
-      current_menu.read_menu_command
-      # validate user input
-      result = current_menu.process_command
-      if result.instance_of?(NewsTracker::Article)
-        puts display_article(result)
-        process_article_input(result)
-      elsif result.instance_of?(NewsTracker::Menu::Main)
-        @current_menu = result
-        print main_menu
-        capture_main_menu_input
-      else
-        display_list
-      end
+      current_menu.display
     elsif current_menu.instance_of?(NewsTracker::Menu::Main)
       menu
     end
   end
 
-  def display_article(article)
-    if current_menu.instance_of? NewsTracker::Menu::List
-      <<~HEREDOC
-        #{line_break}
-        #{build_article(article)}
-        #{line_break}
-        #{prompt_user_to_open}
-        #{prompt_user_to_archive}
-        #{line_break}
-        #{prompt_user_to_go_back}
-        #{line_break}
-      HEREDOC
-    else
-      <<~HEREDOC
-        #{line_break}
-        #{build_article(article)}
-        #{line_break}
-        #{prompt_user_to_open}
-        #{line_break}
-        #{prompt_user_to_go_back}
-        #{line_break}
-      HEREDOC
-    end
+  def article
+    # display sub_menu or return to main
+    # if current_menu.instance_of?(NewsTracker::Menu::List) || current_menu.instance_of?(NewsTracker::Menu::Archive)
+      # print current_menu.display
+
+      # capture & process user input from article list
+      current_menu.read_menu_command
+      result = current_menu.process_command
+      if result.instance_of?(NewsTracker::Article)
+        article_string(result)
+        #process_article_input(result) # TODO
+      elsif result.instance_of?(NewsTracker::Menu::Main)
+        @current_menu = result
+        print main_menu
+        print article_list
+        article
+      else
+        puts 'unknown input, try again'
+        article
+      end
+    # elsif current_menu.instance_of?(NewsTracker::Menu::Main)
+      # menu
+    # end
   end
 
 
   private
+
+    def article_string(article)
+      if current_menu.instance_of? NewsTracker::Menu::List
+        <<~HEREDOC
+          #{line_break}
+          #{build_article(article)}
+          #{line_break}
+          #{prompt_user_to_open}
+          #{prompt_user_to_archive}
+          #{line_break}
+          #{prompt_user_to_go_back}
+          #{line_break}
+        HEREDOC
+      else
+        <<~HEREDOC
+          #{line_break}
+          #{build_article(article)}
+          #{line_break}
+          #{prompt_user_to_open}
+          #{line_break}
+          #{prompt_user_to_go_back}
+          #{line_break}
+        HEREDOC
+      end
+    end
+
     def process_article_input(article)
       input = current_menu.read_menu_command
       if input == 'o'
