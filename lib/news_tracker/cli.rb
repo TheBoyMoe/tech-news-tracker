@@ -1,7 +1,7 @@
 require 'pry'
 
 class NewsTracker::CLI
-
+  attr_reader :current_menu
 
   def initialize
     @current_menu = NewsTracker::Menu::Main.new
@@ -10,44 +10,50 @@ class NewsTracker::CLI
   def call
     print line_break
     print greet_user
-    menu
+    print main_menu
+    capture_main_menu_input
   end
 
-  def menu
+  def main_menu
     # display options and wait for input
-    print @current_menu.display
+    #print @current_menu.display
+    current_menu.display
+  end
+
+  def capture_main_menu_input
     # read user input, set @command
-    @current_menu.read_menu_command
+    current_menu.read_menu_command
     # switch the current menu based on user input
-    @current_menu = @current_menu.process_command
+    @current_menu = current_menu.process_command
     display_list
   end
 
   def display_list
     # display sub_menu or return to main
-    if @current_menu.instance_of?(NewsTracker::Menu::List) || @current_menu.instance_of?(NewsTracker::Menu::Archive)
+    if current_menu.instance_of?(NewsTracker::Menu::List) || current_menu.instance_of?(NewsTracker::Menu::Archive)
       # display the article list
-      print @current_menu.display
+      print current_menu.display
       # capture user input
-      @current_menu.read_menu_command
+      current_menu.read_menu_command
       # validate user input
-      result = @current_menu.process_command
+      result = current_menu.process_command
       if result.instance_of?(NewsTracker::Article)
         puts display_article(result)
         process_article_input(result)
       elsif result.instance_of?(NewsTracker::Menu::Main)
         @current_menu = result
-        menu
+        print main_menu
+        capture_main_menu_input
       else
         display_list
       end
-    elsif @current_menu.instance_of?(NewsTracker::Menu::Main)
+    elsif current_menu.instance_of?(NewsTracker::Menu::Main)
       menu
     end
   end
 
   def display_article(article)
-    if @current_menu.instance_of? NewsTracker::Menu::List
+    if current_menu.instance_of? NewsTracker::Menu::List
       <<~HEREDOC
         #{line_break}
         #{build_article(article)}
@@ -74,7 +80,7 @@ class NewsTracker::CLI
 
   private
     def process_article_input(article)
-      input = @current_menu.read_menu_command
+      input = current_menu.read_menu_command
       if input == 'o'
         open_in_browser(article)
       elsif input == 'a'
