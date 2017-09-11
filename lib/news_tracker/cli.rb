@@ -10,14 +10,38 @@ class NewsTracker::CLI
   def call
     print line_break
     print greet_user
+    display_menu
+  end
+
+  def display_menu
     print main_menu
+    process_main_input
+  end
+
+  def process_main_input
     print article_list
+    process_list_input
+  end
+
+  def process_list_input
     print article
+    # process_article_input # FIXME
+
+  end
+
+  def process_article_input
+    input = current_menu.read_menu_command
+    if input == 'o'
+      open_in_browser(@article)
+    elsif input == 'a'
+      NewsTracker::Article.find_or_insert(@article)
+      puts "article saved..... returning to list"
+    end
+    print @list_string
+    # TODO
   end
 
   def main_menu
-    # display options and wait for input
-    #print @current_menu.display
     current_menu.display
   end
 
@@ -27,45 +51,43 @@ class NewsTracker::CLI
     # switch the current menu based on user input
     @current_menu = current_menu.process_command
     if current_menu.instance_of?(NewsTracker::Menu::List) || current_menu.instance_of?(NewsTracker::Menu::Archive)
-      current_menu.display
+      @list_string = current_menu.display
     elsif current_menu.instance_of?(NewsTracker::Menu::Main)
-      menu
+      display_menu
     end
   end
 
   def article
-    # display sub_menu or return to main
-    # if current_menu.instance_of?(NewsTracker::Menu::List) || current_menu.instance_of?(NewsTracker::Menu::Archive)
-      # print current_menu.display
+    if current_menu.instance_of?(NewsTracker::Menu::List) || current_menu.instance_of?(NewsTracker::Menu::Archive)
 
       # capture & process user input from article list
       current_menu.read_menu_command
       result = current_menu.process_command
       if result.instance_of?(NewsTracker::Article)
-        article_string(result)
-        #process_article_input(result) # TODO
-      elsif result.instance_of?(NewsTracker::Menu::Main)
-        @current_menu = result
-        print main_menu
-        print article_list
-        article
+        @article = result
+        article_string
       else
-        puts 'unknown input, try again'
-        article
+        @current_menu = result
+        if result.instance_of?(NewsTracker::Menu::Main)
+          display_menu
+        else
+          puts 'unknown input, try again'
+          @list_string
+          # TODO handle user input on list menu
+        end
       end
-    # elsif current_menu.instance_of?(NewsTracker::Menu::Main)
-      # menu
-    # end
+    end
   end
+
 
 
   private
 
-    def article_string(article)
+    def article_string
       if current_menu.instance_of? NewsTracker::Menu::List
         <<~HEREDOC
           #{line_break}
-          #{build_article(article)}
+          #{build_article}
           #{line_break}
           #{prompt_user_to_open}
           #{prompt_user_to_archive}
@@ -76,7 +98,7 @@ class NewsTracker::CLI
       else
         <<~HEREDOC
           #{line_break}
-          #{build_article(article)}
+          #{build_article}
           #{line_break}
           #{prompt_user_to_open}
           #{line_break}
@@ -86,19 +108,8 @@ class NewsTracker::CLI
       end
     end
 
-    def process_article_input(article)
-      input = current_menu.read_menu_command
-      if input == 'o'
-        open_in_browser(article)
-      elsif input == 'a'
-        NewsTracker::Article.find_or_insert(article)
-        puts "article saved..... returning to list"
-      end
-      display_list
-    end
-
-    def build_article(article)
-      "Title: #{article.title}\nAuthor: #{article.author}\nDescription: #{text_wrap(article.description)}"
+    def build_article
+      "Title: #{@article.title}\nAuthor: #{@article.author}\nDescription: #{text_wrap(@article.description)}" # FIXME
     end
 
     def greet_user
@@ -129,9 +140,10 @@ class NewsTracker::CLI
       s.gsub(/(.{1,#{width}})(\s+|\Z)/, "\\1")
     end
 
+
     def open_in_browser(article)
       # on ubuntu
-      system("gnome-open '#{article.url}'")
+      system("gnome-open '#{@article.url}'")
       # on mac
       # system("open '#{article.url}'")
     end

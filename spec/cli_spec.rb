@@ -87,7 +87,7 @@ RSpec.describe NewsTracker::CLI do
         # current_menu.read_menu_command
         # article = current_menu.process_command
         # article_string = subject.display_article(article)
-      
+
         subject.current_menu = NewsTracker::Menu::List.new('ruby')
         article_string = subject.article
 
