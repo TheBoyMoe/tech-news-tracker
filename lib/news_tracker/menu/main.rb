@@ -44,13 +44,13 @@ module NewsTracker
 
       private
 
-      def is_list?
-        @command == 'ruby' || @command == 'js' || @command == 'node'
-      end
+        def is_list?
+          @command == 'ruby' || @command == 'js' || @command == 'node'
+        end
 
-      def is_archive?
-        @command == 'archive'
-      end
+        def is_archive?
+          @command == 'archive'
+        end
 
     end
   end
