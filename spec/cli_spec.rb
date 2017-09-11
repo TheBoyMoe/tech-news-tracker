@@ -6,8 +6,15 @@ RSpec.describe NewsTracker::CLI do
   describe '#menu' do
 
     it 'prints the main menu' do
+      # because we are describing the #menu method
+      # here I would expect to call subject.menu
       str = subject.current_menu.display
 
+      # this is arguably a standalone test
+      # where we are describing that when we initialize the CLI
+      # the main menu will be Main
+      # To be honest it feels like implementation details, probably
+      # I would delete that now
       expect(subject.current_menu).to be_a(NewsTracker::Menu::Main)
       expect(str).to include("Option menu:")
       expect(str).to include("Select a topic to list the latest articles")
@@ -32,6 +39,8 @@ RSpec.describe NewsTracker::CLI do
       end
 
       it 'should display a list of articles related to ruby news' do
+        # why instead of the following 3 lines
+        # we can't simply execute subject.display_list ?
         subject.current_menu.read_menu_command
         current_menu = subject.current_menu.process_command
         str = current_menu.display
@@ -44,6 +53,12 @@ RSpec.describe NewsTracker::CLI do
 
   end
 
+  # change to
+  #
+  # describe '#display_article' do
+  # end
+  #
+  # to keep following the convention in the rest of the file
   describe 'display an article to the user' do
 
     context 'should display the selected article' do
@@ -61,6 +76,8 @@ RSpec.describe NewsTracker::CLI do
         article = current_menu.process_command
         article_string = subject.display_article(article)
 
+        # when using multiple expectations for a test check
+        # https://relishapp.com/rspec/rspec-core/docs/expectation-framework-integration/aggregating-failures
         expect(article_string).to include('Title:')
         expect(article_string).to include('Author:')
         expect(article_string).to include('Description:')

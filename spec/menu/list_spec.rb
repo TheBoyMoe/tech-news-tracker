@@ -3,10 +3,20 @@ require 'stringio'
 
 RSpec.describe NewsTracker::Menu::List do
 
+  # seems like this should be wrapped in
+  #
+  # describe '#display' do
+  # end
+  #
   context "when the 'ruby' article list is selected" do
+    #
+    # Something fishy is going on here. To be discussed.
+    #
     # fetch the articles & populate the article cache
     NewsTracker::Menu::List.new('ruby')
 
+    # this seems to be testing NewsTracker::Article instead of
+    # NewsTracker::Menu::List
     it "retrieve an array of article instances" do
       articles = NewsTracker::Article.all
 
@@ -21,7 +31,13 @@ RSpec.describe NewsTracker::Menu::List do
 
   end
 
+  # seems like this should be wrapped in
+  #
+  # describe '#process_command' do
+  # end
+  #
   describe 'prompt the user to select an article, or go back to the previous menu' do
+    # subject { NewsTracker::Menu::List.new('ruby') }
     subject = NewsTracker::Menu::List.new('ruby')
 
     context "if the user enters a valid number" do

@@ -1,5 +1,6 @@
 module NewsTracker
   module Menu
+    # to be divided in public/private methods for clarity
     class Common
 
       def read_menu_command

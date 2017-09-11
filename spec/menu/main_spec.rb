@@ -3,10 +3,31 @@ require 'stringio'
 
 
 RSpec.describe NewsTracker::Menu::Main do
+  # It feels like when can make this spec a bit more dry
+  # by taking out of the various contenxt the before block
+  # as follows
 
+  # before do
+  #   $stdin = command
+  #   subject.read_menu_command
+  # end
+  #
+  # after do
+  #   $stdin = STDIN
+  # end
+
+  # and then inside the contenxts do the following:
+  # let(:command) { StringIO.new("ruby\n") }
+
+  # to keep the convention use:
+  #
+  # describe #process_command do
+  # end
+  #
   describe 'process the user input' do
 
     context "the user selects the 'ruby' article list option" do
+      # can be removed and just add a let, see comment on top of file
       before do
         $stdin = StringIO.new("ruby\n")
       end
@@ -16,6 +37,7 @@ RSpec.describe NewsTracker::Menu::Main do
       end
 
       it "switch the current menu to 'NewsTracker::Menu::List'" do
+        # can be done in before block, see comment at top of file
         subject.read_menu_command
         current_menu = subject.process_command
 

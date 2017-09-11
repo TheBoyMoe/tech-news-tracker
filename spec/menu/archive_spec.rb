@@ -18,10 +18,23 @@ RSpec.describe NewsTracker::Menu::Archive do
   end
 
   context "when user selects 'archive'" do
+    # how about
+    #
+    # let(:article) do
+    #   NewsTracker::Article.new.tap do |article|
+    #     article.title = 'ES6, The future of JS'
+    #     article.author = 'John Smith'
+    #   end
+    # end
     article = NewsTracker::Article.new
     article.title = 'ES6, The future of JS'
     article.author = 'John Smith'
 
+    # to be wrapped in
+    #
+    # describe '#fetch_articles' do
+    # end
+    #
     it "retrives an array of article instances" do
       NewsTracker::Article.find_or_insert(article)
       articles = subject.fetch_articles
@@ -30,6 +43,11 @@ RSpec.describe NewsTracker::Menu::Archive do
       expect(articles.first).to be_a_instance_of(NewsTracker::Article)
     end
 
+    # to be wrapped in
+    #
+    # describe '#display' do
+    # end
+    #
     it "builds a string list of articles" do
       NewsTracker::Article.find_or_insert(article)
       str = subject.display
@@ -40,6 +58,11 @@ RSpec.describe NewsTracker::Menu::Archive do
     end
   end
 
+  # this should be maybe wrapped into
+  #
+  # describe '#process_command' do
+  # end
+  #
   describe 'prompt the user to select an article, or go back to the previous menu' do
     article = NewsTracker::Article.new
     article.title = 'ES6, The future of JS'
