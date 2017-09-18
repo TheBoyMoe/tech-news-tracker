@@ -76,12 +76,12 @@ module NewsTracker
         end
 
         def build_article_str
-          "Title: #{@article.title}\nAuthor: #{@article.author}\nDescription: #{text_wrap(@article.description)}"
+          "Title: #{@article.title}\nAuthor: #{@article.author}\nDescription: #{@article.description}"
         end
 
-        def text_wrap(s, width = 60)
-          s.gsub(/(.{1,#{width}})(\s+|\Z)/, "\\1")
-        end
+        # def text_wrap(s, width = 60)
+        #   s.gsub(/(.{1,#{width}})(\s+|\Z)/, "\\1")
+        # end
 
         def open_in_browser
           # on ubuntu
