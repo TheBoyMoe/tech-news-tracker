@@ -13,6 +13,7 @@ RSpec.describe NewsTracker::CLI do
 
   describe '#menu' do
 
+    # main menu #######
     context "when a user enters 'ruby'" do
       before do
         $stdin = StringIO.new("ruby\n")
@@ -29,6 +30,52 @@ RSpec.describe NewsTracker::CLI do
       end
     end
 
+    context "when a user enters 'archive'" do
+      before do
+        $stdin = StringIO.new("archive\n")
+      end
+      after do
+        $stdin = STDIN
+      end
+
+      it "should change the current menu to NewsTracker::Menu::Archive" do
+        suppress_output{subject.menu}
+
+        expect(subject.current_menu).to be_a_instance_of(NewsTracker::Menu::Archive)
+      end
+    end
+
+    # context "when a user enters 'exit'" do
+    #   before do
+    #     $stdin = StringIO.new("exit\n")
+    #   end
+    #   after do
+    #     $stdin = STDIN
+    #   end
+    #
+    #   it "should terminate the app" do
+    #     suppress_output{subject.menu}
+    #     expect(subject.current_menu).to eq(nil)
+    #   end
+    # end
+
+    context "when a user enters 'unknown'" do
+      before do
+        $stdin = StringIO.new("unknown\n")
+      end
+      after do
+        $stdin = STDIN
+      end
+
+      it "the current menu should remain NewsTracker::Menu::Main" do
+        suppress_output{subject.menu}
+
+        expect(subject.current_menu).to be_a_instance_of(NewsTracker::Menu::Main)
+      end
+    end
+
+
+    # list menu #######
     context "when a user enters 'ruby' and selects the first article" do
       before do
         $stdin = StringIO.new("ruby\n1\n")
@@ -48,23 +95,32 @@ RSpec.describe NewsTracker::CLI do
       end
     end
 
-    context "when a user enters 'archive'" do
+    context "when a user enters 'ruby' and enters back" do
       before do
-        $stdin = StringIO.new("archive\n")
+        $stdin = StringIO.new("ruby\nback\n")
       end
+
       after do
         $stdin = STDIN
       end
 
-      it "should change the current menu to NewsTracker::Menu::Archive" do
-        suppress_output{subject.menu}
+      it "should go back to main menu" do
+        suppress_output {
+          subject.menu
+          subject.menu
+        }
 
-        expect(subject.current_menu).to be_a_instance_of(NewsTracker::Menu::Archive)
+        expect(subject.current_menu).to be_a_instance_of(NewsTracker::Menu::Main)
       end
     end
 
-    context "when a user enters 'archive' and selects the first article" do
+    context "when a user enters 'ruby' and enters 'unknown'" do
+      # TODO
+    end
 
+
+    # archive menu ########
+    context "when a user enters 'archive' and selects the first article" do
 
       before do
         NewsTracker::Article.create_table
@@ -90,15 +146,20 @@ RSpec.describe NewsTracker::CLI do
       end
     end
 
-    context 'if select ruby and select back' do
+    context "when a user enters 'archive' and enters 'back'" do
       before do
-        $stdin = StringIO.new("ruby\nback\n")
+        NewsTracker::Article.create_table
+
+        $stdin = StringIO.new("archive\nback\n")
       end
 
       after do
+        NewsTracker::Article.drop_table
+
         $stdin = STDIN
       end
-      it "then goes back to main menu" do
+
+      it "should go back to main menu" do
         suppress_output {
           subject.menu
           subject.menu
@@ -107,6 +168,77 @@ RSpec.describe NewsTracker::CLI do
         expect(subject.current_menu).to be_a_instance_of(NewsTracker::Menu::Main)
       end
     end
+
+    context "when a user enters 'archive' and enters 'unknown'" do
+      # TODO
+    end
+
+
+    # article menu ########
+
+    # TODO opens browser & returns to List menu
+    context "when a user enters 'ruby', selects the first article and enters 'o'" do
+    end
+
+    # TODO check data base count went up & returns to List menu
+    context "when a user enters 'ruby', selects the first article and enters 'a'" do
+
+    end
+
+    # TODO
+    context "when a user enters 'ruby', selects the first article and enters 'back'" do
+      before do
+        $stdin = StringIO.new("ruby\n1\nback\n")
+      end
+
+      after do
+        $stdin = STDIN
+      end
+
+      it "should go back to NewsTracker::Menu::List" do
+        suppress_output {
+          subject.menu
+          subject.menu
+          subject.menu
+        }
+
+        expect(subject.current_menu).to be_a_instance_of(NewsTracker::Menu::List)
+      end
+    end
+
+    context "when a user enters 'ruby', selects the first article and enters 'unknown'" do
+      # TODO
+    end
+
+    context "when a user enters 'archive', selects the first article and enters 'o'" do
+      # TODO
+    end
+
+    # TODO
+    context "when a user enters 'archive', selects the first article and enters 'back'" do
+      before do
+        $stdin = StringIO.new("archive\n1\nback\n")
+      end
+
+      after do
+        $stdin = STDIN
+      end
+
+      it "should go back to NewsTracker::Menu::Archive" do
+        suppress_output {
+          subject.menu
+          subject.menu
+          subject.menu
+        }
+
+        expect(subject.current_menu).to be_a_instance_of(NewsTracker::Menu::Archive)
+      end
+    end
+
+    context "when a user enters 'archive', selects the first article and enters 'unknown'" do
+      #TODO
+    end
+
 
   end
 
