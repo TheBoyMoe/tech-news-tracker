@@ -14,61 +14,56 @@ class NewsTracker::CLI
   end
 
   def menu
-    # display options and wait for input
     print @current_menu.display
-    # read user input, set @command
     @current_menu.read_menu_command
-    # switch the current menu based on user input
     @current_menu = @current_menu.process_command
   end
 
-  def display_list
-    # display sub_menu or return to main
-    if @current_menu.instance_of?(NewsTracker::Menu::List) || @current_menu.instance_of?(NewsTracker::Menu::Archive)
-      # display the article list
-      print @current_menu.display
-      # capture user input
-      @current_menu.read_menu_command
-      # validate user input
-      result = @current_menu.process_command
-      if result.instance_of?(NewsTracker::Article)
-        puts display_article(result)
-        process_article_input(result)
-      elsif result.instance_of?(NewsTracker::Menu::Main)
-        @current_menu = result
-        menu
-      else
-        display_list
-      end
-    elsif @current_menu.instance_of?(NewsTracker::Menu::Main)
-      menu
-    end
-  end
+  # def display_list
+  #   if @current_menu.instance_of?(NewsTracker::Menu::List) || @current_menu.instance_of?(NewsTracker::Menu::Archive)
+  #     # display menu, capture and process user input
+  #     print @current_menu.display
+  #     @current_menu.read_menu_command
+  #     result = @current_menu.process_command
+  #     if result.instance_of?(NewsTracker::Article)
+  #       puts display_article(result)
+  #       process_article_input(result)
+  #     elsif result.instance_of?(NewsTracker::Menu::Main)
+  #       @current_menu = result
+  #       menu
+  #     else
+  #       display_list
+  #     end
+  #   elsif @current_menu.instance_of?(NewsTracker::Menu::Main)
+  #     menu
+  #   end
+  # end
 
-  def display_article(article)
-    if @current_menu.instance_of? NewsTracker::Menu::List
-      # <<~HEREDOC
-      #   #{line_break}
-      #   #{build_article(article)}
-      #   #{line_break}
-      #   #{prompt_user_to_open}
-      #   #{prompt_user_to_archive}
-      #   #{line_break}
-      #   #{prompt_user_to_go_back}
-      #   #{line_break}
-      # HEREDOC
-    else
-      # <<~HEREDOC
-      #   #{line_break}
-      #   #{build_article(article)}
-      #   #{line_break}
-      #   #{prompt_user_to_open}
-      #   #{line_break}
-      #   #{prompt_user_to_go_back}
-      #   #{line_break}
-      # HEREDOC
-    end
-  end
+  # def display_article(article)
+  #   # MOVE this to article #display method
+  #   if @current_menu.instance_of? NewsTracker::Menu::List
+  #     <<~HEREDOC
+  #       #{line_break}
+  #       #{build_article(article)}
+  #       #{line_break}
+  #       #{prompt_user_to_open}
+  #       #{prompt_user_to_archive}
+  #       #{line_break}
+  #       #{prompt_user_to_go_back}
+  #       #{line_break}
+  #     HEREDOC
+  #   else
+  #     <<~HEREDOC
+  #       #{line_break}
+  #       #{build_article(article)}
+  #       #{line_break}
+  #       #{prompt_user_to_open}
+  #       #{line_break}
+  #       #{prompt_user_to_go_back}
+  #       #{line_break}
+  #     HEREDOC
+  #   end
+  # end
 
 
   private
