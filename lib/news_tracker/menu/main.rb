@@ -23,12 +23,9 @@ module NewsTracker
       end
 
       def process_command
-        # validate user input(@command)
         if is_list?
-          # display the latest ruby/js/node articles
           NewsTracker::Menu::List.new(@command)
         elsif is_archive?
-          # display the archive list
           NewsTracker::Menu::Archive.new
         elsif @command == 'exit'
           # terminate app

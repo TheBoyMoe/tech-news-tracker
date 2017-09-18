@@ -16,54 +16,10 @@ class NewsTracker::CLI
   def menu
     print @current_menu.display
     @current_menu.read_menu_command
+    # puts "CLI-pre #{@current_menu}" # DEBUG
     @current_menu = @current_menu.process_command
+    # puts "CLI-post #{@current_menu}" # DEBUG
   end
-
-  # def display_list
-  #   if @current_menu.instance_of?(NewsTracker::Menu::List) || @current_menu.instance_of?(NewsTracker::Menu::Archive)
-  #     # display menu, capture and process user input
-  #     print @current_menu.display
-  #     @current_menu.read_menu_command
-  #     result = @current_menu.process_command
-  #     if result.instance_of?(NewsTracker::Article)
-  #       puts display_article(result)
-  #       process_article_input(result)
-  #     elsif result.instance_of?(NewsTracker::Menu::Main)
-  #       @current_menu = result
-  #       menu
-  #     else
-  #       display_list
-  #     end
-  #   elsif @current_menu.instance_of?(NewsTracker::Menu::Main)
-  #     menu
-  #   end
-  # end
-
-  # def display_article(article)
-  #   # MOVE this to article #display method
-  #   if @current_menu.instance_of? NewsTracker::Menu::List
-  #     <<~HEREDOC
-  #       #{line_break}
-  #       #{build_article(article)}
-  #       #{line_break}
-  #       #{prompt_user_to_open}
-  #       #{prompt_user_to_archive}
-  #       #{line_break}
-  #       #{prompt_user_to_go_back}
-  #       #{line_break}
-  #     HEREDOC
-  #   else
-  #     <<~HEREDOC
-  #       #{line_break}
-  #       #{build_article(article)}
-  #       #{line_break}
-  #       #{prompt_user_to_open}
-  #       #{line_break}
-  #       #{prompt_user_to_go_back}
-  #       #{line_break}
-  #     HEREDOC
-  #   end
-  # end
 
 
   private
@@ -79,46 +35,5 @@ class NewsTracker::CLI
       "\n\n  Welcome to News Tracker - Ruby/Rails/Javascript and Node News!\n\n"
     end
 
-
-    # def process_article_input(article)
-    #   input = @current_menu.read_menu_command
-    #   if input == 'o'
-    #     open_in_browser(article)
-    #   elsif input == 'a'
-    #     NewsTracker::Article.find_or_insert(article)
-    #     puts "article saved..... returning to list"
-    #   end
-    #   display_list
-    # end
-
-    # def build_article(article)
-    #   "Title: #{article.title}\nAuthor: #{article.author}\nDescription: #{text_wrap(article.description)}"
-    # end
-
-
-    # def prompt_user_to_archive
-    #   "Type 'a' to archive the article and return to article list"
-    # end
-
-    # def prompt_user_to_open
-    #   "Type 'o' to view in a browser"
-    # end
-    #
-    # def prompt_user_to_go_back
-    #   "Type 'back' to review the list again"
-    # end
-
-
-
-    # def text_wrap(s, width = 60)
-    #   s.gsub(/(.{1,#{width}})(\s+|\Z)/, "\\1")
-    # end
-
-    # def open_in_browser(article)
-    #   # on ubuntu
-    #   system("gnome-open '#{article.url}'")
-    #   # on mac
-    #   # system("open '#{article.url}'")
-    # end
 
 end

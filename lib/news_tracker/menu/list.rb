@@ -11,7 +11,6 @@ module NewsTracker
       ]
 
       def initialize(list_type)
-        # retrieve the articles & populate the article cache
         @list_type = list_type
         populate_article_cache
       end
@@ -31,8 +30,6 @@ module NewsTracker
 
       def process_command
         if @command.to_i > 0 && @command.to_i <= NewsTracker::Article.all.size
-          # return the article
-          #NewsTracker::Article.all[@command.to_i - 1]
           NewsTracker::Menu::Article.new(@command.to_i - 1, @list_type)
         elsif @command == 'back'
           NewsTracker::Menu::Main.new

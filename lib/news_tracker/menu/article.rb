@@ -35,11 +35,10 @@ module NewsTracker
       end
 
       def process_command
-        input = self.read_menu_command
-        if input == 'o'
+        if @command == 'o'
           puts "opening article in browser.... returning to list"
           open_in_browser
-        elsif input == 'a'
+        elsif @command == 'a'
           NewsTracker::Article.find_or_insert(@article)
           puts "article saved..... returning to list"
         end
@@ -56,7 +55,6 @@ module NewsTracker
         end
 
         def generate_article_content
-          # fetch article
           if @list_type != 'archive'
             @article = NewsTracker::Article.all[@article_number]
           else
