@@ -3,31 +3,33 @@ require 'stringio'
 
 RSpec.describe NewsTracker::CLI do
 
-  describe '#menu' do
+  describe '#initialize' do
 
-    it 'prints the main menu' do
+    it 'initialize CLI with the NewsTracker::Menu::Main' do
       # because we are describing the #menu method
       # here I would expect to call subject.menu
-      str = subject.current_menu.display
+
+      #str = subject.current_menu.display
 
       # this is arguably a standalone test
       # where we are describing that when we initialize the CLI
       # the main menu will be Main
       # To be honest it feels like implementation details, probably
       # I would delete that now
-      expect(subject.current_menu).to be_a(NewsTracker::Menu::Main)
-      expect(str).to include("Option menu:")
-      expect(str).to include("Select a topic to list the latest articles")
-      expect(str).to include("Type 'ruby' for Ruby and Rails news")
-      expect(str).to include("Type 'js' for Javascript news")
-      expect(str).to include("Type 'node' for NodeJS news")
-      expect(str).to include("Type 'archive' to view article archive")
-      expect(str).to include("Type 'exit' to quit")
+      expect(subject.current_menu).to be_a_instance_of(NewsTracker::Menu::Main)
+
+      # expect(str).to include("Option menu:")
+      # expect(str).to include("Select a topic to list the latest articles")
+      # expect(str).to include("Type 'ruby' for Ruby and Rails news")
+      # expect(str).to include("Type 'js' for Javascript news")
+      # expect(str).to include("Type 'node' for NodeJS news")
+      # expect(str).to include("Type 'archive' to view article archive")
+      # expect(str).to include("Type 'exit' to quit")
     end
 
   end
 
-  describe '#display_list' do
+  describe '#menu' do
 
     context "when a user enters 'ruby'" do
       before do
@@ -38,17 +40,65 @@ RSpec.describe NewsTracker::CLI do
         $stdin = STDIN
       end
 
-      it 'should display a list of articles related to ruby news' do
-        # why instead of the following 3 lines
-        # we can't simply execute subject.display_list ?
-        subject.current_menu.read_menu_command
-        current_menu = subject.current_menu.process_command
-        str = current_menu.display
+      it 'should change the current menu to NewsTracker::Menu::List' do
+        suppress_output { subject.menu }
 
-        expect(str).to be_a(String)
-        expect(str).to include('Displaying ruby news:')
+        expect(subject.current_menu).to be_a_instance_of(NewsTracker::Menu::List)
+      end
+    end
+
+    context 'it select ruby and it selects the first article' do
+      before do
+        $stdin = StringIO.new("ruby\n1\n")
       end
 
+      after do
+        $stdin = STDIN
+      end
+
+      it 'should switch to an article menu' do
+        suppress_output {
+          subject.menu
+          subject.menu
+        }
+
+        expect(subject.current_menu).to be_a_instance_of(NewsTracker::Menu::Article)
+      end
+    end
+
+    context 'it select archive and it selects the first article' do
+      before do
+        $stdin = StringIO.new("archive\n1\n")
+      end
+
+      after do
+        $stdin = STDIN
+      end
+
+      it 'should switch to an article menu' do
+        suppress_output {
+          subject.menu
+          subject.menu
+        }
+
+        expect(subject.current_menu).to be_a_instance_of(NewsTracker::Menu::Article)
+      end
+    end
+
+    context 'if select ruby and select back' do
+      before do
+        $stdin = StringIO.new("ruby\nback\n")
+      end
+
+      after do
+        $stdin = STDIN
+      end
+      it "then goes back to main menu" do
+        subject.menu
+        subject.menu
+
+        expect(subject.current_menu).to be_a_instance_of(NewsTracker::Menu::Main)
+      end
     end
 
   end

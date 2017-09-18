@@ -4,7 +4,7 @@ module NewsTracker
     class Common
 
       def read_menu_command
-        @command = $stdin.gets.strip.downcase
+        @command = $stdin.gets.chomp.strip.downcase
       end
 
       def build_article_list(array)
@@ -14,7 +14,7 @@ module NewsTracker
         end
         str.gsub(/\n$/, '')
       end
-      
+
       def select_article_number(number)
         "Enter a number between 1-#{number} to view more detail"
       end

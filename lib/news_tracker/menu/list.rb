@@ -36,7 +36,8 @@ module NewsTracker
           # - 'unknown' input
         if @command.to_i > 0 && @command.to_i <= NewsTracker::Article.all.size
           # return the article
-          NewsTracker::Article.all[@command.to_i - 1]
+          #NewsTracker::Article.all[@command.to_i - 1]
+          NewsTracker::Menu::Article.new
         elsif @command == 'back'
           NewsTracker::Menu::Main.new
         else

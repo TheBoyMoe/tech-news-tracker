@@ -1,6 +1,8 @@
+require_relative './common'
+
 module NewsTracker
   module Menu
-    class Main
+    class Main < Common
       def initialize
         @command = nil
       end
@@ -20,10 +22,6 @@ module NewsTracker
         HEREDOC
       end
 
-      def read_menu_command
-        @command = $stdin.gets.strip.downcase
-      end
-
       def process_command
         # validate user input(@command)
         if is_list?
@@ -35,6 +33,7 @@ module NewsTracker
         elsif @command == 'exit'
           # terminate app
           puts 'Goodbye!'
+          exit
         else
           # not a valid command, so stay in the same menu
           puts 'Not a valid command'

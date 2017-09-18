@@ -1,7 +1,7 @@
 require 'pry'
 
 class NewsTracker::CLI
-
+  attr_reader :current_menu
 
   def initialize
     @current_menu = NewsTracker::Menu::Main.new
@@ -20,7 +20,6 @@ class NewsTracker::CLI
     @current_menu.read_menu_command
     # switch the current menu based on user input
     @current_menu = @current_menu.process_command
-    display_list
   end
 
   def display_list
@@ -48,26 +47,26 @@ class NewsTracker::CLI
 
   def display_article(article)
     if @current_menu.instance_of? NewsTracker::Menu::List
-      <<~HEREDOC
-        #{line_break}
-        #{build_article(article)}
-        #{line_break}
-        #{prompt_user_to_open}
-        #{prompt_user_to_archive}
-        #{line_break}
-        #{prompt_user_to_go_back}
-        #{line_break}
-      HEREDOC
+      # <<~HEREDOC
+      #   #{line_break}
+      #   #{build_article(article)}
+      #   #{line_break}
+      #   #{prompt_user_to_open}
+      #   #{prompt_user_to_archive}
+      #   #{line_break}
+      #   #{prompt_user_to_go_back}
+      #   #{line_break}
+      # HEREDOC
     else
-      <<~HEREDOC
-        #{line_break}
-        #{build_article(article)}
-        #{line_break}
-        #{prompt_user_to_open}
-        #{line_break}
-        #{prompt_user_to_go_back}
-        #{line_break}
-      HEREDOC
+      # <<~HEREDOC
+      #   #{line_break}
+      #   #{build_article(article)}
+      #   #{line_break}
+      #   #{prompt_user_to_open}
+      #   #{line_break}
+      #   #{prompt_user_to_go_back}
+      #   #{line_break}
+      # HEREDOC
     end
   end
 
