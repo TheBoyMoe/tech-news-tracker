@@ -20,7 +20,7 @@ module NewsTracker
       def process_command
         if @command.to_i > 0 && @command.to_i <= fetch_articles.size
           # NewsTracker::Article.fetch_article_from_archive(@command.to_i)
-          NewsTracker::Menu::Article.new(@command)
+          NewsTracker::Menu::Article.new(@command, 'archive')
         elsif @command == 'back'
           NewsTracker::Menu::Main.new
         else
