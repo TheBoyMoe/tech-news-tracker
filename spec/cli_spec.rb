@@ -229,11 +229,7 @@ RSpec.describe NewsTracker::CLI do
           $stdin = STDIN
         end
 
-        it "should open the article in a browser window" do
-
-        end
-
-        it "should switch menu to NewsTracker::Menu::List" do
+        it "should open the article in a browser window and switch menu to NewsTracker::Menu::List" do
           suppress_output {
             subject.menu
             subject.menu
@@ -244,7 +240,6 @@ RSpec.describe NewsTracker::CLI do
         end
       end
 
-      # TODO check data base count went up
       context "when a user enters 'ruby', selects the first article and enters 'a'" do
         before do
           NewsTracker::Article.create_table
@@ -259,10 +254,16 @@ RSpec.describe NewsTracker::CLI do
         end
 
         it "the number of articles saved to the database should go up by 1" do
+          suppress_output {
+            subject.menu
+            subject.menu
+            subject.menu
+          }
 
+          expect(NewsTracker::Article.fetch_archive.size).to eq(1)
         end
 
-        it "should go back to NewsTracker::Menu::List" do
+        it "should switch menu to NewsTracker::Menu::List" do
           suppress_output {
             subject.menu
             subject.menu
@@ -402,40 +403,5 @@ RSpec.describe NewsTracker::CLI do
 
   end
 
-  # describe '#display_list' do
-  #
-  # end
-
-
-  # describe '#display_article' do
-  #
-  #   context 'should display the selected article' do
-  #     before do
-  #       $stdin = StringIO.new("1")
-  #     end
-  #
-  #     after do
-  #       $stdin = STDIN
-  #     end
-  #
-  #     it 'an article should contain a title, author and description field and prompt the user to take action' do
-  #       current_menu = NewsTracker::Menu::List.new('ruby')
-  #       current_menu.read_menu_command
-  #       article = current_menu.process_command
-  #       article_string = subject.display_article(article)
-  #
-  #       # when using multiple expectations for a test check
-  #       # https://relishapp.com/rspec/rspec-core/docs/expectation-framework-integration/aggregating-failures
-  #       expect(article_string).to include('Title:')
-  #       expect(article_string).to include('Author:')
-  #       expect(article_string).to include('Description:')
-  #       # expect(article_string).to include("Type 'a' to archive the article and return to article list")
-  #       expect(article_string).to include("Type 'o' to view in a browser")
-  #       expect(article_string).to include("Type 'back' to review the list again")
-  #     end
-  #
-  #   end
-  #
-  # end
 
 end

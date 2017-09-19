@@ -3,9 +3,6 @@ require_relative './common'
 module NewsTracker
   module Menu
     class Main < Common
-      def initialize
-        @command = nil
-      end
 
       def display
         <<~HEREDOC

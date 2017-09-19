@@ -3,6 +3,7 @@ require_relative "./common"
 module NewsTracker
   module Menu
     class Article < Common
+      attr_reader :article_number, :list_type
 
       def initialize(article_number, list_type)
         @article_number = article_number
@@ -10,6 +11,7 @@ module NewsTracker
       end
 
       def display
+        puts "calling display"
         if @list_type != 'archive'
           <<~HEREDOC
             #{line_break}

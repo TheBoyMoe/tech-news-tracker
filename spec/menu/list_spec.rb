@@ -1,96 +1,34 @@
 require "spec_helper"
-require 'stringio'
+# require 'stringio'
 
 RSpec.describe NewsTracker::Menu::List do
 
-  # seems like this should be wrapped in
-  #
-  # describe '#display' do
-  # end
-  #
-  context "when the 'ruby' article list is selected" do
-    #
-    # Something fishy is going on here. To be discussed.
-    #
-    # fetch the articles & populate the article cache
-    NewsTracker::Menu::List.new('ruby')
+  let(:list_menu){NewsTracker::Menu::List.new('ruby')}
 
-    # this seems to be testing NewsTracker::Article instead of
-    # NewsTracker::Menu::List
-    it "retrieve an array of article instances" do
-      articles = NewsTracker::Article.all
+  describe '#initialize' do
+    context "when a user selects 'ruby' article list" do
 
-      expect(articles).to be_a(Array)
-      expect(articles.first).to be_a_instance_of(NewsTracker::Article)
+      it "sets the '@list_type' to 'ruby'" do
+        expect(list_menu.list_type).to eq('ruby')
+      end
+
+      it "populates the article cache with instances of NewsTracker::Article" do
+        expect(NewsTracker::Article.all).to be_a(Array)
+        expect(NewsTracker::Article.all.first).to be_a_instance_of(NewsTracker::Article)
+      end
+
     end
-
-    it 'build a string of the article list for display' do
-      subject = NewsTracker::Menu::List.new('ruby')
-      expect(subject.display).to include('Displaying ruby news:')
-    end
-
   end
 
-  # seems like this should be wrapped in
-  #
-  # describe '#process_command' do
-  # end
-  #
-  describe 'prompt the user to select an article, or go back to the previous menu' do
-    # subject { NewsTracker::Menu::List.new('ruby') }
-    subject = NewsTracker::Menu::List.new('ruby')
+  describe '#display' do
+    context "when a user selects 'ruby' article list" do
 
-    context "if the user enters a valid number" do
-      before do
-        $stdin = StringIO.new("1\n")
+      it "returns a string of the article list, that includes 'Displaying ruby news:'" do
+        expect(list_menu.display).to be_a(String)
+        expect(list_menu.display).to include('Displaying ruby news:')
       end
 
-      after do
-        $stdin = STDIN
-      end
-
-      it "an article instance is returned" do
-        subject.read_menu_command
-        article = subject.process_command
-
-        expect(article).to be_a_instance_of(NewsTracker::Article)
-      end
     end
-
-    context "if the user enters 'back'" do
-      before do
-        $stdin = StringIO.new("back\n")
-      end
-
-      after do
-        $stdin = STDIN
-      end
-
-      it "an instance of NewsTracker::Menu::Main is returned" do
-        subject.read_menu_command
-        result = subject.process_command
-
-        expect(result).to be_a_instance_of(NewsTracker::Menu::Main)
-      end
-    end
-
-    context "if the entry is 'unknown'" do
-      before do
-        $stdin = StringIO.new("'unknown'\n")
-      end
-
-      after do
-        $stdin = STDIN
-      end
-
-      it "stay on the same menu" do
-        subject.read_menu_command
-        result = subject.process_command
-
-        expect(result).to be_a_instance_of(NewsTracker::Menu::List)
-      end
-    end
-
   end
 
 end

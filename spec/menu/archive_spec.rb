@@ -1,5 +1,5 @@
 require "spec_helper"
-require 'stringio'
+# require 'stringio'
 
 RSpec.describe NewsTracker::Menu::Archive do
 
@@ -17,108 +17,33 @@ RSpec.describe NewsTracker::Menu::Archive do
     DB[:conn].execute(sql)
   end
 
-  context "when user selects 'archive'" do
+  after(:each) do
+     DB[:conn].execute('DROP TABLE IF EXISTS articles')
+  end
 
-    let(:article) do
-      NewsTracker::Article.new.tap do |article|
-        article.title = 'ES6, The future of JS'
-        article.author = 'John Smith'
-      end
-    end
-
-    # article = NewsTracker::Article.new
-    # article.title = 'ES6, The future of JS'
-    # article.author = 'John Smith'
-
-    # to be wrapped in
-    #
-    describe '#fetch_articles' do
-
-      it "retrives an array of article instances" do
-        NewsTracker::Article.find_or_insert(article)
-        articles = subject.fetch_articles
-
-        expect(articles).to be_a(Array)
-        expect(articles.first).to be_a_instance_of(NewsTracker::Article)
-      end
-
-    end
-
-    # to be wrapped in
-    #
-    # describe '#display' do
-    # end
-    #
-    it "builds a string list of articles" do
-      NewsTracker::Article.find_or_insert(article)
-      str = subject.display
-
-      expect(str).to be_a(String)
-      expect(str).to include('Displaying list of archived articles')
-      expect(str).to include('ES6, The future of JS')
+  let(:article) do
+    NewsTracker::Article.new.tap do |article|
+      article.title = 'ES6, The future of JS'
+      article.author = 'John Smith'
     end
   end
 
-  # this should be maybe wrapped into
-  #
-  # describe '#process_command' do
-  # end
-  #
-  describe 'prompt the user to select an article, or go back to the previous menu' do
-    # article = NewsTracker::Article.new
-    # article.title = 'ES6, The future of JS'
-    # article.author = 'John Smith'
+  describe '#display' do
 
-    context 'if the user enters a valid number' do
-      before do
-        $stdin = StringIO.new("1\n")
-      end
+    context "when user selects 'archive'" do
 
-      after do
-        $stdin = STDIN
-      end
-
-      it " article instance is returned" do
+      it "returns a string of the article list" do
         NewsTracker::Article.find_or_insert(article)
-        subject.read_menu_command
-        article = subject.process_command
+        str = subject.display
 
-        expect(article).to be_a_instance_of(NewsTracker::Article)
+        expect(str).to be_a(String)
+        expect(str).to include('Displaying list of archived articles')
+        expect(str).to include('ES6, The future of JS')
       end
+
     end
 
-    context "if the user enters 'back'" do
-      before do
-        $stdin = StringIO.new("back\n")
-      end
-
-      after do
-        $stdin = STDIN
-      end
-
-      it "return an instance of NewsTracker::Menu::Main" do
-        subject.read_menu_command
-        result = subject.process_command
-
-        expect(result).to be_a_instance_of(NewsTracker::Menu::Main)
-      end
-    end
-
-    context "if the entry is 'unknown'" do
-      before do
-        $stdin = StringIO.new("'unknown'\n")
-      end
-
-      after do
-        $stdin = STDIN
-      end
-
-      it "stay on the same menu" do
-        subject.read_menu_command
-        result = subject.process_command
-
-        expect(result).to be_a_instance_of(NewsTracker::Menu::Archive)
-      end
-    end
   end
+
+
 end

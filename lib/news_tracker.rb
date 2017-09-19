@@ -4,6 +4,7 @@ require 'nokogiri'
 require 'rss'
 require 'sqlite3'
 
+
 DB = {:conn => SQLite3::Database.new('db/articles.db')}
 
 module NewsTracker

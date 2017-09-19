@@ -3,6 +3,7 @@ require_relative "./common"
 module NewsTracker
   module Menu
     class List < Common
+      attr_reader :list_type
 
       @@urls = [
         "http://rubyweekly.com/rss/16581bfg",

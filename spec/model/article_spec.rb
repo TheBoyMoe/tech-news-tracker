@@ -90,25 +90,6 @@ RSpec.describe NewsTracker::Article do
 
   describe '.find_or_insert' do
 
-    # context 'when an article already exist' do
-    #   before do
-    #     # Insert existing article
-    #   end
-    #
-    #   let(:existing_article) do
-    #     # create the article
-    #   end
-    #
-    #   it 'is not going to create a new one on find' do
-    #     # test here
-    #     # existing_article
-    #   end
-    #
-    #   it 'is logging a message that the article already exist' do
-    #     # test here
-    #   end
-    # end
-
     it "creates an instance of article and inserts it into the database if it does not already exist" do
       article.title = 'ES6, The future of JS'
       article.author = 'John Smith'
