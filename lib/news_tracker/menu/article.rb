@@ -11,7 +11,6 @@ module NewsTracker
       end
 
       def display
-        puts "calling display"
         if @list_type != 'archive'
           <<~HEREDOC
             #{line_break}
