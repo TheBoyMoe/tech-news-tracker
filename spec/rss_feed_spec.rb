@@ -20,10 +20,10 @@ RSpec.describe NewsTracker::RssFeed do
 
         expect(articles).to be_a(Array)
         expect(articles.first).to be_an_instance_of(NewsTracker::Article)
-        # expect(articles.first.title).to eq("The Limits of Copy-on-Write: How Ruby Allocates Memory")
-        # expect(articles.first.author).to eq("Brandur Leach")
-        # expect(articles.first.description).to eq("How heap and object allocation work in Ruby, often leading to bloated sub-processes, and what’s on the roadmap to help.")
-        # expect(articles.first.url).to eq("https://brandur.org/ruby-memory")
+        expect(articles.first.title).to eq("Ruby 2.4.2 Released With Multiple Security Fixesbuffer under-run vuln in Kernel.sprintf")
+        expect(articles.first.author).to eq("ruby-lang.org")
+        expect(articles.first.description).to eq("The vulnerabilities include a buffer under-run vuln in Kernel.sprintf and RubyGems issues. Ruby 2.2.8 and 2.3.5 are also out for the same reason.")
+        expect(articles.first.url).to eq("https://www.ruby-lang.org/en/news/2017/09/14/ruby-2-4-2-released/")
       end
     end
 
@@ -37,10 +37,10 @@ RSpec.describe NewsTracker::RssFeed do
 
         expect(articles).to be_a(Array)
         expect(articles.first).to be_an_instance_of(NewsTracker::Article)
-        # expect(articles.first.title).to eq("The Limits of Copy-on-Write: How Ruby Allocates Memory")
-        # expect(articles.first.author).to eq("Brandur Leach")
-        # expect(articles.first.description).to eq("How heap and object allocation work in Ruby, often leading to bloated sub-processes, and what’s on the roadmap to help.")
-        # expect(articles.first.url).to eq("https://brandur.org/ruby-memory")
+        expect(articles.first.title).to eq("How Memory Management Works in JavaScript")
+        expect(articles.first.author).to eq("Alexander Zlatkov")
+        expect(articles.first.description).to eq(".. and how to handle 4 common memory leaks. A good primer for anyone not familiar with the depths of memory management.")
+        expect(articles.first.url).to eq("https://blog.sessionstack.com/how-javascript-works-memory-management-how-to-handle-4-common-memory-leaks-3f28b94cfbec")
       end
     end
 
@@ -54,10 +54,10 @@ RSpec.describe NewsTracker::RssFeed do
 
         expect(articles).to be_a(Array)
         expect(articles.first).to be_an_instance_of(NewsTracker::Article)
-        # expect(articles.first.title).to eq("The Limits of Copy-on-Write: How Ruby Allocates Memory")
-        # expect(articles.first.author).to eq("Brandur Leach")
-        # expect(articles.first.description).to eq("How heap and object allocation work in Ruby, often leading to bloated sub-processes, and what’s on the roadmap to help.")
-        # expect(articles.first.url).to eq("https://brandur.org/ruby-memory")
+        expect(articles.first.title).to eq("Paul Irish on Debugging in 2017 with Node.js")
+        expect(articles.first.author).to eq("Node Summit")
+        # expect(articles.first.description).to eq("Paul Irish demonstrates improved workflows for debugging, profiling and understanding your app using... the DevTools protocol. He also shares more advanced techniques for automating and monitoring Node.")
+        expect(articles.first.url).to eq("https://nodeweekly.com/link/25574/rss")
       end
     end
 
