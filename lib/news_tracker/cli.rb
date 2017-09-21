@@ -27,9 +27,9 @@ class NewsTracker::CLI
       "------------------------------------------------------------------"
     end
 
-    def clear_screen
-      system "clear"
-    end
+    # def clear_screen
+    #   system "clear"
+    # end
 
     def greet_user
       "\n\n  Welcome to News Tracker - Ruby/Rails/Javascript and Node News!\n\n"
