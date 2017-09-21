@@ -8,7 +8,7 @@
 /spec/reports/
 /tmp/
 .DS_Store
-/fixtures/vcr_cassettes/*.yml
+/spec/fixtures/vcr_cassettes/*.yml
 
 /db/articles.db
 

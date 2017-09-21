@@ -25,7 +25,9 @@ RSpec.describe NewsTracker::CLI do
         end
 
         it 'should switch menu to NewsTracker::Menu::List' do
-          suppress_output { subject.menu }
+          VCR.use_cassette('select-ruby') do
+            suppress_output { subject.menu }
+          end
 
           expect(subject.current_menu).to be_a_instance_of(NewsTracker::Menu::List)
         end
@@ -92,10 +94,12 @@ RSpec.describe NewsTracker::CLI do
         end
 
         it 'should switch menu to NewsTracker::Menu::Article' do
-          suppress_output {
-            subject.menu
-            subject.menu
-          }
+          VCR.use_cassette('select-ruby-and-first-article') do
+            suppress_output {
+              subject.menu
+              subject.menu
+            }
+          end
 
           expect(subject.current_menu).to be_a_instance_of(NewsTracker::Menu::Article)
         end
@@ -111,10 +115,12 @@ RSpec.describe NewsTracker::CLI do
         end
 
         it "should switch menu to NewsTracker::Menu::Main" do
-          suppress_output {
-            subject.menu
-            subject.menu
-          }
+          VCR.use_cassette('select-ruby-and-go-back') do
+            suppress_output {
+              subject.menu
+              subject.menu
+            }
+          end
 
           expect(subject.current_menu).to be_a_instance_of(NewsTracker::Menu::Main)
         end
@@ -130,10 +136,12 @@ RSpec.describe NewsTracker::CLI do
         end
 
         it "should remain on the same menu, NewsTracker::Menu::List" do
-          suppress_output {
-            subject.menu
-            subject.menu
-          }
+          VCR.use_cassette('select-ruby-and-unknown') do
+            suppress_output {
+              subject.menu
+              subject.menu
+            }
+          end
 
           expect(subject.current_menu).to be_a_instance_of(NewsTracker::Menu::List)
         end
@@ -233,22 +241,27 @@ RSpec.describe NewsTracker::CLI do
         it "should open the article in a browser window" do
           expect(Kernel).to receive(:system).with(/gnome-open/).and_call_original
 
-          suppress_output {
-            subject.menu
-            subject.menu
-            subject.menu
-          }
+          VCR.use_cassette('select-article-and-open') do
+            suppress_output {
+              subject.menu
+              subject.menu
+              subject.menu
+            }
+          end
         end
 
         it "switch menu to NewsTracker::Menu::List" do
-          suppress_output {
-            subject.menu
-            subject.menu
-            subject.menu
-          }
+          VCR.use_cassette('select-article-and-open') do
+            suppress_output {
+              subject.menu
+              subject.menu
+              subject.menu
+            }
+          end
 
           expect(subject.current_menu).to be_a_instance_of(NewsTracker::Menu::List)
         end
+
       end
 
       context "when a user enters 'ruby', selects the first article and enters 'a'" do
@@ -265,21 +278,25 @@ RSpec.describe NewsTracker::CLI do
         end
 
         it "the number of articles saved to the database should go up by 1" do
-          suppress_output {
-            subject.menu
-            subject.menu
-            subject.menu
-          }
+          VCR.use_cassette('select-article-and-archive') do
+            suppress_output {
+              subject.menu
+              subject.menu
+              subject.menu
+            }
+          end
 
           expect(NewsTracker::Article.fetch_archive.size).to eq(1)
         end
 
         it "should switch menu to NewsTracker::Menu::List" do
-          suppress_output {
-            subject.menu
-            subject.menu
-            subject.menu
-          }
+          VCR.use_cassette('select-article-and-archive') do
+            suppress_output {
+              subject.menu
+              subject.menu
+              subject.menu
+            }
+          end
 
           expect(subject.current_menu).to be_a_instance_of(NewsTracker::Menu::List)
         end
@@ -296,11 +313,13 @@ RSpec.describe NewsTracker::CLI do
         end
 
         it "should go back to NewsTracker::Menu::List" do
-          suppress_output {
-            subject.menu
-            subject.menu
-            subject.menu
-          }
+          VCR.use_cassette('select-article-and-back') do
+            suppress_output {
+              subject.menu
+              subject.menu
+              subject.menu
+            }
+          end
 
           expect(subject.current_menu).to be_a_instance_of(NewsTracker::Menu::List)
         end
@@ -316,11 +335,13 @@ RSpec.describe NewsTracker::CLI do
         end
 
         it "should go back to NewsTracker::Menu::List" do
-          suppress_output {
-            subject.menu
-            subject.menu
-            subject.menu
-          }
+          VCR.use_cassette('select-article-and-unknown') do
+            suppress_output {
+              subject.menu
+              subject.menu
+              subject.menu
+            }
+          end
 
           expect(subject.current_menu).to be_a_instance_of(NewsTracker::Menu::List)
         end

@@ -11,6 +11,7 @@ DB[:conn] = SQLite3::Database.new ":memory:"
 
 # vcr config
 VCR.configure do |config|
+  config.ignore_localhost = true
   config.cassette_library_dir = "spec/fixtures/vcr_cassettes"
   config.hook_into :webmock # or :fakeweb
 end
