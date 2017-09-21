@@ -46,6 +46,7 @@ RSpec.describe NewsTracker::CLI do
         end
       end
 
+      # causes app to terminate
       # context "when a user enters 'exit'" do
       #   before do
       #     $stdin = StringIO.new("exit\n")
@@ -54,9 +55,10 @@ RSpec.describe NewsTracker::CLI do
       #     $stdin = STDIN
       #   end
       #
-      #   it "should terminate the app" do
+      #   it "the kernel should recieve the command to terminate the app" do
+      #     expect(Kernel).to receive(:exit)
+      #
       #     suppress_output{subject.menu}
-      #     expect(subject.current_menu).to eq(nil)
       #   end
       # end
 
@@ -219,7 +221,6 @@ RSpec.describe NewsTracker::CLI do
 
     context "article menu" do
 
-      # TODO opens arcticle browser
       context "when a user enters 'ruby', selects the first article and enters 'o'" do
         before do
           $stdin = StringIO.new("ruby\n1\no\n")
@@ -229,7 +230,17 @@ RSpec.describe NewsTracker::CLI do
           $stdin = STDIN
         end
 
-        it "should open the article in a browser window and switch menu to NewsTracker::Menu::List" do
+        it "should open the article in a browser window" do
+          expect(Kernel).to receive(:system).with(/gnome-open/).and_call_original
+
+          suppress_output {
+            subject.menu
+            subject.menu
+            subject.menu
+          }
+        end
+
+        it "switch menu to NewsTracker::Menu::List" do
           suppress_output {
             subject.menu
             subject.menu
@@ -315,7 +326,6 @@ RSpec.describe NewsTracker::CLI do
         end
       end
 
-      # TODO opens article in browser
       context "when a user enters 'archive', selects the first article and enters 'o'" do
         before do
           NewsTracker::Article.create_table
@@ -332,7 +342,13 @@ RSpec.describe NewsTracker::CLI do
         end
 
         it "should open the article in a browser window" do
+          expect(Kernel).to receive(:system).with(/gnome-open/).and_call_original
 
+          suppress_output {
+            subject.menu
+            subject.menu
+            subject.menu
+          }
         end
 
         it "should go back to NewsTracker::Menu::Archive" do

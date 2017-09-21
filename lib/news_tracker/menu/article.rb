@@ -85,8 +85,9 @@ module NewsTracker
         # end
 
         def open_in_browser
+          puts 'opening browser'
           # on ubuntu
-          system("gnome-open '#{@article.url}'")
+          Kernel.system("gnome-open '#{@article.url}'")
           # on mac
           # system("open '#{article.url}'")
         end

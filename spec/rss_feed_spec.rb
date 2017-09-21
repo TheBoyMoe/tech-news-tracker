@@ -1,9 +1,14 @@
 require 'spec_helper'
 
 RSpec.describe NewsTracker::RssFeed do
-
+  # TODO test 'js' and 'node' feeds
+  # TODO integrate vcr
   describe '#create_article_instances_from_hashes' do
-
+    let(:url){[
+        'http://rubyweekly.com/rss/1b38al0g',
+        'http://javascriptweekly.com/rss/221bj275',
+        'https://nodeweekly.com/rss/'
+      ]}
     it "should create article instances from hashes, save those instances to NewsTracker::Article.all" do
       NewsTracker::Article.clear_all
       url = 'http://rubyweekly.com/rss/1b38al0g'
