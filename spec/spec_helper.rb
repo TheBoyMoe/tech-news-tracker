@@ -4,9 +4,16 @@ SimpleCov.start
 require "bundler/setup"
 require "news_tracker"
 require "pry"
+require 'vcr'
 
 
 DB[:conn] = SQLite3::Database.new ":memory:"
+
+# vcr config
+VCR.configure do |config|
+  config.cassette_library_dir = "spec/fixtures/vcr_cassettes"
+  config.hook_into :webmock # or :fakeweb
+end
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -22,7 +29,14 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 
-  # config global before/after:
+  # vcr config
+  # config.around(:each) do |example|
+  #   VCR.use_cassette("rss-feeds") do
+  #     example.run
+  #   end
+  # end
+
+  # config DB[:conn] global before/after:
   # config.before(:each) do
   #   if Article.respond_to?(:create_table)
   #     Article.create_table

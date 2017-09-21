@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe NewsTracker::RssFeed do
-  # TODO test 'js' and 'node' feeds
+
   # TODO integrate vcr
   describe '#create_article_instances_from_hashes' do
     let(:url){[
@@ -13,7 +13,9 @@ RSpec.describe NewsTracker::RssFeed do
     context "when you select 'ruby'" do
       it "should fetch the articles and save them as an array of  NewsTracker::Article instances" do
         NewsTracker::Article.clear_all
-        NewsTracker::RssFeed.new(url[0]).create_article_instances_from_hashes
+        VCR.use_cassette('ruby-rss-feed') do
+          NewsTracker::RssFeed.new(url[0]).create_article_instances_from_hashes
+        end
         articles = NewsTracker::Article.all
 
         expect(articles).to be_a(Array)
@@ -28,7 +30,9 @@ RSpec.describe NewsTracker::RssFeed do
     context "when you select 'js'" do
       it "should fetch the articles and save them as an array of  NewsTracker::Article instances" do
         NewsTracker::Article.clear_all
-        NewsTracker::RssFeed.new(url[1]).create_article_instances_from_hashes
+        VCR.use_cassette('js-rss-feed') do
+          NewsTracker::RssFeed.new(url[1]).create_article_instances_from_hashes
+        end
         articles = NewsTracker::Article.all
 
         expect(articles).to be_a(Array)
@@ -43,7 +47,9 @@ RSpec.describe NewsTracker::RssFeed do
     context "when you select 'node'" do
       it "should fetch the articles and save them as an array of  NewsTracker::Article instances" do
         NewsTracker::Article.clear_all
-        NewsTracker::RssFeed.new(url[2]).create_article_instances_from_hashes
+        VCR.use_cassette('node-rss-feed') do
+          NewsTracker::RssFeed.new(url[2]).create_article_instances_from_hashes
+        end
         articles = NewsTracker::Article.all
 
         expect(articles).to be_a(Array)
@@ -54,7 +60,7 @@ RSpec.describe NewsTracker::RssFeed do
         # expect(articles.first.url).to eq("https://brandur.org/ruby-memory")
       end
     end
-    
+
   end
 
 end

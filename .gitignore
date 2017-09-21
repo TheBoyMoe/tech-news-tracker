@@ -8,6 +8,7 @@
 /spec/reports/
 /tmp/
 .DS_Store
+/fixtures/vcr_cassettes
 
 /db/articles.db
 
